@@ -278,19 +278,36 @@
     list-style:none;
   }
   .subjects li{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    padding:6px 0;
     border-bottom:1px dashed var(--line);
-    font-size:.84rem;
   }
   .subjects li:last-child{border-bottom:none;}
-  .subjects li span{
+  .subjects li a{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:9px 2px;
+    font-size:.84rem;
+    color:var(--bone);
+    text-decoration:none;
+    -webkit-tap-highlight-color:rgba(199,160,52,.15);
+  }
+  .subjects li a:active,
+  .subjects li a:focus-visible{
+    color:var(--brass);
+  }
+  .subjects li a .lec{
     color:var(--bone-dim);
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     font-size:.78rem;
     flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .subjects li a .arrow{
+    color:var(--brass);
+    font-size:.9rem;
   }
 
   .empty{
@@ -335,6 +352,8 @@
 <footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
 
 <script>
+const SUBJECT_BASE = 'https://cds.streamfiles.eu.org/#/subject/';
+
 const CAT_COLOR = {
   CDS:   'var(--brass)',
   NDA:   'var(--sage)',
@@ -420,7 +439,10 @@ function render(){
       <details>
         <summary>View subject files</summary>
         <ul class="subjects">
-          ${b.subjects.map(s=>`<li>${escapeHtml(s.title)}<span>${s.lecture_count} lec</span></li>`).join('')}
+          ${b.subjects.map(s=>`<li><a href="${SUBJECT_BASE}${encodeURIComponent(s.id)}" target="_blank" rel="noopener noreferrer">
+            <span>${escapeHtml(s.title)}</span>
+            <span class="lec">${s.lecture_count} lec <span class="arrow">›</span></span>
+          </a></li>`).join('')}
         </ul>
       </details>
     </article>`;
