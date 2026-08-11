@@ -1,0 +1,302 @@
+{
+  "batches": [
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6ImFscGhhLW1hdGgtYmF0Y2gtY2RzLTEtMjAyNiIsImV4cCI6MTc4NjQ4MDA5Nn0.MvSHkPH31SLIRw_FpY6nDZu1QDzNMvVoz4_AgjNydbY",
+      "title": "Alpha MATH Batch (CDS-1 2026)",
+      "short_description": "CDS — 1 subject batch",
+      "is_free": true,
+      "category": "CDS",
+      "subject_count": 1,
+      "lecture_count": 96,
+      "subjects": [
+        { "title": "Maths", "lecture_count": 96 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6ImFscGhhLW90YS1iYXRjaC1jZHMtMS0yMDI2IiwiZXhwIjoxNzg2NDgwMDk2fQ.gjKgpopGzDf52y2FqQNy8_ffW3D6wmfmjEGhTJ8FaQg",
+      "title": "Alpha OTA Batch (CDS-1 2026)",
+      "short_description": "CDS — 18 subject batch",
+      "is_free": true,
+      "category": "CDS",
+      "subject_count": 18,
+      "lecture_count": 255,
+      "subjects": [
+        { "title": "Medieval History", "lecture_count": 2 },
+        { "title": "PHYSICS", "lecture_count": 13 },
+        { "title": "Indian Geography", "lecture_count": 19 },
+        { "title": "Polity", "lecture_count": 25 },
+        { "title": "ANCIENT HISTORY", "lecture_count": 21 },
+        { "title": "Modern History", "lecture_count": 13 },
+        { "title": "Op Surprise", "lecture_count": 2 },
+        { "title": "Economics", "lecture_count": 11 },
+        { "title": "English Grammar", "lecture_count": 24 },
+        { "title": "English Practice", "lecture_count": 13 },
+        { "title": "English Vocabulary", "lecture_count": 19 },
+        { "title": "English breakfast", "lecture_count": 24 },
+        { "title": "BIOLOGY", "lecture_count": 15 },
+        { "title": "CHEMISTRY", "lecture_count": 12 },
+        { "title": "Physical Geography", "lecture_count": 21 },
+        { "title": "Quick Revision", "lecture_count": 12 },
+        { "title": "HUMAN GEOGRAPHY", "lecture_count": 3 },
+        { "title": "Baatcheet", "lecture_count": 6 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6ImJyYXZvLWdhdC1iYXRjaC1uZGEtMS0yMDI2IiwiZXhwIjoxNzg2NDgwMDk2fQ.4FixgCyOh6fS7MAlbteG9ttFTyXzkmLzw_dn_kX-d00",
+      "title": "Bravo GAT Batch (NDA-1 2026)",
+      "short_description": "NDA — 17 subject batch",
+      "is_free": true,
+      "category": "NDA",
+      "subject_count": 17,
+      "lecture_count": 239,
+      "subjects": [
+        { "title": "PHYSICS", "lecture_count": 29 },
+        { "title": "ANCIENT HISTORY", "lecture_count": 21 },
+        { "title": "Modern History", "lecture_count": 13 },
+        { "title": "HUMAN GEOGRAPHY", "lecture_count": 3 },
+        { "title": "Indian Geography", "lecture_count": 19 },
+        { "title": "Polity", "lecture_count": 25 },
+        { "title": "English breakfast", "lecture_count": 8 },
+        { "title": "Op Surprise", "lecture_count": 2 },
+        { "title": "Medieval History", "lecture_count": 2 },
+        { "title": "English Vocabulary", "lecture_count": 18 },
+        { "title": "English Grammar", "lecture_count": 22 },
+        { "title": "English Practice", "lecture_count": 11 },
+        { "title": "BIOLOGY", "lecture_count": 15 },
+        { "title": "Physical Geography", "lecture_count": 21 },
+        { "title": "CHEMISTRY", "lecture_count": 12 },
+        { "title": "Quick Revision", "lecture_count": 12 },
+        { "title": "Baatcheet", "lecture_count": 6 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6ImJyYXZvLW1hdGgtYmF0Y2gtbmRhLTEtMjAyNiIsImV4cCI6MTc4NjQ4MDA5Nn0.ojqtq1yHawGwLjW2srJw-NIs927lGNFI5kB4uQYMfr0",
+      "title": "Bravo MATH Batch (NDA-1 2026)",
+      "short_description": "NDA — 2 subject batch",
+      "is_free": true,
+      "category": "NDA",
+      "subject_count": 2,
+      "lecture_count": 119,
+      "subjects": [
+        { "title": "Maths", "lecture_count": 98 },
+        { "title": "Maths breakfast", "lecture_count": 21 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6ImNhcGYtcGFwZXItMS1wYXBlci0yLWRlbHRhLWJhdGNoLWNhcGYtMjAyNiIsImV4cCI6MTc4NjQ4MDA5Nn0.aNqC8BUQGSYWvOpbWEQgtcEi-XMTqjA0BTTTIoZARsQ",
+      "title": "CDS/CAPF Paper 1 + Paper 2 Delta Batch (CAPF 2026)",
+      "short_description": "CAPF — 16 subject batch",
+      "is_free": true,
+      "category": "CAPF",
+      "subject_count": 16,
+      "lecture_count": 212,
+      "subjects": [
+        { "title": "Modern History", "lecture_count": 13 },
+        { "title": "TEST DISCUSSION", "lecture_count": 1 },
+        { "title": "International relations", "lecture_count": 19 },
+        { "title": "ANCIENT HISTORY", "lecture_count": 21 },
+        { "title": "Indian Geography", "lecture_count": 19 },
+        { "title": "HUMAN GEOGRAPHY", "lecture_count": 3 },
+        { "title": "CHEMISTRY", "lecture_count": 12 },
+        { "title": "Governance", "lecture_count": 9 },
+        { "title": "PHYSICS", "lecture_count": 13 },
+        { "title": "Medieval History", "lecture_count": 2 },
+        { "title": "Polity", "lecture_count": 43 },
+        { "title": "Baatcheet", "lecture_count": 3 },
+        { "title": "Physical Geography", "lecture_count": 21 },
+        { "title": "Quick Revision", "lecture_count": 12 },
+        { "title": "Answer writing", "lecture_count": 2 },
+        { "title": "Internal Security", "lecture_count": 19 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi05LWNhcGYtcGFwZXItMS1wYXBlci0yLWRlbHRhLWJhdGNoLWNhcGYtMjAyNiIsImV4cCI6MTc4NjQ4MDA5Nn0.xIhJJ5iQU2iPxDsn06hggluUVnX_kl6IxDCSzexiE9w",
+      "title": "CAPF Paper 1 + Paper 2 Delta batch (CAPF 2026)",
+      "short_description": "CAPF — 21 subject batch",
+      "is_free": true,
+      "category": "CAPF",
+      "subject_count": 21,
+      "lecture_count": 280,
+      "subjects": [
+        { "title": "BIOLOGY", "lecture_count": 7 },
+        { "title": "Medieval History", "lecture_count": 4 },
+        { "title": "TEST DISCUSSION", "lecture_count": 1 },
+        { "title": "Maths", "lecture_count": 26 },
+        { "title": "Science & Tech", "lecture_count": 7 },
+        { "title": "English", "lecture_count": 13 },
+        { "title": "Economics", "lecture_count": 6 },
+        { "title": "International relations", "lecture_count": 19 },
+        { "title": "CHEMISTRY", "lecture_count": 12 },
+        { "title": "Governance", "lecture_count": 14 },
+        { "title": "PHYSICS", "lecture_count": 13 },
+        { "title": "ANCIENT HISTORY", "lecture_count": 21 },
+        { "title": "Indian Geography", "lecture_count": 19 },
+        { "title": "HUMAN GEOGRAPHY", "lecture_count": 3 },
+        { "title": "Modern History", "lecture_count": 13 },
+        { "title": "Polity", "lecture_count": 44 },
+        { "title": "Baatcheet", "lecture_count": 4 },
+        { "title": "Physical Geography", "lecture_count": 21 },
+        { "title": "Quick Revision", "lecture_count": 12 },
+        { "title": "Answer writing", "lecture_count": 2 },
+        { "title": "Internal Security", "lecture_count": 19 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi02LWNhcGYtcGFwZXItMi1kZWx0YS1iYXRjaC1jYXBmLTIwMjYiLCJleHAiOjE3ODY0ODAwOTZ9.J66weGsjECGxacZhPezjVqOENkPOn6qrSA2Y97hZzOU",
+      "title": "CAPF Paper 2 Delta batch (CAPF 2026)",
+      "short_description": "CAPF — 9 subject batch",
+      "is_free": true,
+      "category": "CAPF",
+      "subject_count": 9,
+      "lecture_count": 103,
+      "subjects": [
+        { "title": "English", "lecture_count": 13 },
+        { "title": "TEST DISCUSSION", "lecture_count": 1 },
+        { "title": "Maths", "lecture_count": 26 },
+        { "title": "Science & Tech", "lecture_count": 7 },
+        { "title": "International relations", "lecture_count": 19 },
+        { "title": "Governance", "lecture_count": 14 },
+        { "title": "Baatcheet", "lecture_count": 2 },
+        { "title": "Internal Security", "lecture_count": 19 },
+        { "title": "Answer writing", "lecture_count": 2 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi01LWVjaG8tYmF0Y2gtYWZjYXQtMi0yMDI2IiwiZXhwIjoxNzg2NDgwMDk2fQ.dcZ2sCyVr1zq5dK3xXhh-YbEiuc4aRXQKqs11k0dvGw",
+      "title": "ECHO BATCH (AFCAT 2 2026)",
+      "short_description": "AFCAT — 9 subject batch",
+      "is_free": true,
+      "category": "AFCAT",
+      "subject_count": 9,
+      "lecture_count": 60,
+      "subjects": [
+        { "title": "Reasoning and Military Aptitude", "lecture_count": 10 },
+        { "title": "Maths", "lecture_count": 23 },
+        { "title": "English Grammar", "lecture_count": 10 },
+        { "title": "General Awareness", "lecture_count": 2 },
+        { "title": "English", "lecture_count": 5 },
+        { "title": "English Practice", "lecture_count": 2 },
+        { "title": "Current Affairs", "lecture_count": 1 },
+        { "title": "Baatcheet", "lecture_count": 2 },
+        { "title": "GForm Explanation", "lecture_count": 5 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi03LWZveHRyb3QtYmF0Y2gtYWZjYXQtMi0yMDI2IiwiZXhwIjoxNzg2NDgwMDk2fQ.uWQecOqP2EPxnlyDNDVvzf_BjrW7cTK720KHEaT06QY",
+      "title": "FOXTROT BATCH (AFCAT 2 2026)",
+      "short_description": "AFCAT — 6 subject batch",
+      "is_free": true,
+      "category": "AFCAT",
+      "subject_count": 6,
+      "lecture_count": 30,
+      "subjects": [
+        { "title": "Current Affairs", "lecture_count": 1 },
+        { "title": "English", "lecture_count": 2 },
+        { "title": "English Grammar", "lecture_count": 10 },
+        { "title": "General Awareness", "lecture_count": 2 },
+        { "title": "Reasoning and Military Aptitude", "lecture_count": 7 },
+        { "title": "Maths", "lecture_count": 8 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi0zLWdvbGYtbWF0aC1iYXRjaC1jZHMtMi0yMDI2IiwiZXhwIjoxNzg2NDgwMDk2fQ.nMF2dg6_G_r6ZtHNXh7ERNgg0ExXl7qaocnsq_n507o",
+      "title": "GOLF MATH BATCH (CDS-2 2026)",
+      "short_description": "CDS — 1 subject batch",
+      "is_free": true,
+      "category": "CDS",
+      "subject_count": 1,
+      "lecture_count": 17,
+      "subjects": [
+        { "title": "Maths", "lecture_count": 17 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi04LWdvbGYtb3RhLWJhdGNoLWNkcy0yLTIwMjYiLCJleHAiOjE3ODY0ODAwOTZ9.tdIHRAHUeOfen8DUhmVOpVaZ8alxCfSI96Ve0SN-0GA",
+      "title": "GOLF OTA BATCH (CDS-2 2026)",
+      "short_description": "CDS — 8 subject batch",
+      "is_free": true,
+      "category": "CDS",
+      "subject_count": 8,
+      "lecture_count": 36,
+      "subjects": [
+        { "title": "BIOLOGY", "lecture_count": 7 },
+        { "title": "English Vocabulary", "lecture_count": 8 },
+        { "title": "English Grammar", "lecture_count": 9 },
+        { "title": "English breakfast", "lecture_count": 1 },
+        { "title": "One Pager", "lecture_count": 3 },
+        { "title": "GForm Explanation", "lecture_count": 1 },
+        { "title": "English Practice", "lecture_count": 1 },
+        { "title": "Polity", "lecture_count": 6 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Imh1Yi00LWhvdGVsLWJhdGNoLW5kYS0yLTIwMjYiLCJleHAiOjE3ODY0ODAwOTZ9.uLrOJTTPh6rz4AsKr6YFsDqBu4qZr4RbgIPOqfMpfo4",
+      "title": "HOTEL BATCH (NDA-2 2026)",
+      "short_description": "NDA — 10 subject batch",
+      "is_free": true,
+      "category": "NDA",
+      "subject_count": 10,
+      "lecture_count": 55,
+      "subjects": [
+        { "title": "English breakfast", "lecture_count": 1 },
+        { "title": "English Vocabulary", "lecture_count": 8 },
+        { "title": "Maths breakfast", "lecture_count": 2 },
+        { "title": "One Pager", "lecture_count": 3 },
+        { "title": "GForm Explanation", "lecture_count": 1 },
+        { "title": "Polity", "lecture_count": 6 },
+        { "title": "English Grammar", "lecture_count": 9 },
+        { "title": "English Practice", "lecture_count": 1 },
+        { "title": "BIOLOGY", "lecture_count": 7 },
+        { "title": "Maths", "lecture_count": 17 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6InhyYXktYmF0Y2giLCJleHAiOjE3ODY0ODAwOTZ9.hGffjKnn0XVp1BQx0reT8sKSexUQppTXz5psFZ5OS6I",
+      "title": "Xray batch",
+      "short_description": "Legacy — 1 subject batch",
+      "is_free": true,
+      "category": "Legacy",
+      "subject_count": 1,
+      "lecture_count": 339,
+      "subjects": [
+        { "title": "All", "lecture_count": 339 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6InlhbmtlZS1iYXRjaCIsImV4cCI6MTc4NjQ4MDA5Nn0.2-VB2qhUBqggrG9SQPBFxdk9Vr1K3D3plNySRyZGxio",
+      "title": "yankee batch",
+      "short_description": "Legacy — 1 subject batch",
+      "is_free": true,
+      "category": "Legacy",
+      "subject_count": 1,
+      "lecture_count": 66,
+      "subjects": [
+        { "title": "All", "lecture_count": 66 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Inp1bHUtbWF0aHMiLCJleHAiOjE3ODY0ODAwOTZ9.Gw9dbHnW5cTVo1jUlV3-HNnUatuJ6zw0NAQZW-BQEAY",
+      "title": "zulu maths",
+      "short_description": "Legacy — 1 subject batch",
+      "is_free": true,
+      "category": "Legacy",
+      "subject_count": 1,
+      "lecture_count": 91,
+      "subjects": [
+        { "title": "All", "lecture_count": 91 }
+      ]
+    },
+    {
+      "id": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYXRjaF9pZCI6Inp1bHUtb3RhIiwiZXhwIjoxNzg2NDgwMDk2fQ.kJBgKF1uq2LIkTJ_T9kFraD16gFxUr1bLmiaapUFBKk",
+      "title": "zulu ota",
+      "short_description": "CDS — 1 subject batch",
+      "is_free": true,
+      "category": "CDS",
+      "subject_count": 1,
+      "lecture_count": 233,
+      "subjects": [
+        { "title": "All", "lecture_count": 233 }
+      ]
+    }
+  ]
+}

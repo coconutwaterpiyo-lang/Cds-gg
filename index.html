@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence Prep Archive — Batch Manifest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-black:#15170f;
+    --panel:#1e2216;
+    --panel-hi:#262b1a;
+    --khaki:#d6cd9f;
+    --brass:#c7a034;
+    --signal:#bf4632;
+    --sage:#7c8a5a;
+    --steel:#6b8590;
+    --bone:#eef0e2;
+    --bone-dim:#9aa085;
+    --line:#3a4029;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top, #1c2015 0%, var(--ink-black) 55%);
+    background-attachment:fixed;
+    color:var(--bone);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    line-height:1.45;
+    min-height:100vh;
+  }
+  .display{font-family:'Oswald',-apple-system,sans-serif;text-transform:uppercase;letter-spacing:.04em;}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+
+  /* ---------- header ---------- */
+  header{
+    padding:28px 18px 18px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(90deg, rgba(199,160,52,.035) 0 1px, transparent 1px 34px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    font-size:.72rem;
+    color:var(--brass);
+    letter-spacing:.22em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .eyebrow .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--signal);
+    box-shadow:0 0 6px var(--signal);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  h1{
+    font-size:clamp(1.7rem,7vw,2.5rem);
+    margin:0 0 6px;
+    font-weight:700;
+    line-height:1;
+  }
+  .sub{
+    color:var(--bone-dim);
+    font-size:.9rem;
+    max-width:46ch;
+  }
+  .stats{
+    margin-top:16px;
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+  }
+  .stat b{
+    display:block;
+    font-family:'Oswald';
+    font-size:1.3rem;
+    color:var(--khaki);
+  }
+  .stat span{
+    font-size:.68rem;
+    letter-spacing:.14em;
+    color:var(--bone-dim);
+    text-transform:uppercase;
+  }
+
+  /* ---------- controls ---------- */
+  .controls{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:rgba(21,23,15,.92);
+    backdrop-filter:blur(6px);
+    padding:12px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  #search{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-size:.95rem;
+    padding:11px 14px;
+    border-radius:var(--radius);
+    outline:none;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  #search::placeholder{color:var(--bone-dim);}
+  #search:focus{border-color:var(--brass);}
+  .chips{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-top:10px;
+    padding-bottom:2px;
+    scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto;
+    font-family:'Oswald';
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:7px 13px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    color:var(--bone-dim);
+    background:transparent;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .chip.active{
+    color:var(--ink-black);
+    background:var(--brass);
+    border-color:var(--brass);
+    font-weight:600;
+  }
+
+  /* ---------- list ---------- */
+  main{padding:16px;}
+  #count-line{
+    color:var(--bone-dim);
+    font-size:.76rem;
+    letter-spacing:.08em;
+    margin:4px 4px 14px;
+    text-transform:uppercase;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  @media(min-width:640px){ .grid{grid-template-columns:1fr 1fr;} }
+  @media(min-width:1000px){ .grid{grid-template-columns:1fr 1fr 1fr;} }
+
+  .card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    clip-path:polygon(0 0, 88% 0, 100% 26px, 100% 100%, 0 100%);
+    animation:stamp-in .5s cubic-bezier(.2,.8,.2,1) backwards;
+  }
+  @media (prefers-reduced-motion: reduce){ .card{animation:none;} }
+  @keyframes stamp-in{
+    from{opacity:0; transform:translateY(6px) scale(.98);}
+    to{opacity:1; transform:none;}
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--cat-color,var(--brass));
+  }
+  .card-head{
+    padding:16px 16px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .cat-tag{
+    font-family:'Oswald';
+    font-size:.68rem;
+    letter-spacing:.14em;
+    color:var(--cat-color,var(--brass));
+    border:1px solid var(--cat-color,var(--brass));
+    padding:3px 8px;
+    border-radius:2px;
+  }
+  .free-stamp{
+    font-family:'Oswald';
+    font-size:.6rem;
+    letter-spacing:.12em;
+    color:var(--signal);
+    border:1.5px dashed var(--signal);
+    border-radius:50%;
+    width:52px;height:52px;
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(-11deg);
+    padding:4px;
+    animation:stamp-thud .4s .15s cubic-bezier(.3,1.6,.4,1) backwards;
+  }
+  @media (prefers-reduced-motion: reduce){ .free-stamp{animation:none;} }
+  @keyframes stamp-thud{
+    from{opacity:0; transform:rotate(-11deg) scale(2.2);}
+    to{opacity:1; transform:rotate(-11deg) scale(1);}
+  }
+  .card h2{
+    font-size:1.05rem;
+    margin:12px 16px 4px;
+    font-weight:600;
+    line-height:1.25;
+  }
+  .card .desc{
+    margin:0 16px 12px;
+    color:var(--bone-dim);
+    font-size:.82rem;
+  }
+  .meta-row{
+    display:flex;
+    gap:16px;
+    margin:0 16px 14px;
+    padding-top:10px;
+    border-top:1px solid var(--line);
+  }
+  .meta-row div{font-size:.72rem; color:var(--bone-dim);}
+  .meta-row b{
+    display:block;
+    font-family:'Oswald';
+    font-size:1rem;
+    color:var(--bone);
+    font-weight:600;
+  }
+
+  details{ border-top:1px solid var(--line); }
+  summary{
+    list-style:none;
+    cursor:pointer;
+    padding:11px 16px;
+    font-size:.76rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--khaki);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Oswald';
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::after{
+    content:"▾";
+    transition:transform .2s;
+    color:var(--bone-dim);
+  }
+  details[open] summary::after{transform:rotate(180deg);}
+  .subjects{
+    margin:0;
+    padding:0 16px 14px;
+    list-style:none;
+  }
+  .subjects li{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:6px 0;
+    border-bottom:1px dashed var(--line);
+    font-size:.84rem;
+  }
+  .subjects li:last-child{border-bottom:none;}
+  .subjects li span{
+    color:var(--bone-dim);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.78rem;
+    flex:0 0 auto;
+  }
+
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--bone-dim);
+  }
+  .empty .display{font-size:1.1rem; color:var(--khaki); margin-bottom:6px;}
+
+  footer{
+    text-align:center;
+    padding:26px 18px 40px;
+    color:var(--bone-dim);
+    font-size:.72rem;
+    letter-spacing:.06em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow"><span class="dot"></span>ARCHIVE STATUS — LIVE</div>
+  <h1 class="display">Defence Prep Archive</h1>
+  <p class="sub">Every free batch, indexed and filed. CDS · NDA · CAPF · AFCAT — one manifest, no paywalls.</p>
+  <div class="stats">
+    <div class="stat"><b id="stat-batches">–</b><span>Batches Filed</span></div>
+    <div class="stat"><b id="stat-lectures">–</b><span>Lectures Indexed</span></div>
+    <div class="stat"><b id="stat-subjects">–</b><span>Subject Files</span></div>
+  </div>
+</header>
+
+<div class="controls">
+  <input id="search" type="text" placeholder="Search the manifest… (e.g. maths, polity, CDS)" autocomplete="off">
+  <div class="chips" id="chips"></div>
+</div>
+
+<main>
+  <p id="count-line"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
+
+<script>
+const CAT_COLOR = {
+  CDS:   'var(--brass)',
+  NDA:   'var(--sage)',
+  CAPF:  'var(--signal)',
+  AFCAT: 'var(--steel)',
+  Legacy:'var(--bone-dim)'
+};
+
+let ALL = [];
+let activeCat = 'ALL';
+
+async function boot(){
+  const res = await fetch('data.json');
+  const data = await res.json();
+  ALL = data.batches;
+  buildChips();
+  updateStats();
+  render();
+}
+
+function buildChips(){
+  const cats = ['ALL', ...new Set(ALL.map(b => b.category))];
+  const wrap = document.getElementById('chips');
+  wrap.innerHTML = cats.map(c =>
+    `<button class="chip ${c==='ALL'?'active':''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  wrap.querySelectorAll('.chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      activeCat = btn.dataset.cat;
+      wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+  });
+}
+
+function updateStats(){
+  const lectures = ALL.reduce((s,b)=>s+b.lecture_count,0);
+  const subjects = ALL.reduce((s,b)=>s+b.subject_count,0);
+  document.getElementById('stat-batches').textContent = ALL.length;
+  document.getElementById('stat-lectures').textContent = lectures.toLocaleString();
+  document.getElementById('stat-subjects').textContent = subjects;
+}
+
+function render(){
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const grid = document.getElementById('grid');
+
+  const filtered = ALL.filter(b=>{
+    const matchesCat = activeCat==='ALL' || b.category===activeCat;
+    const matchesSearch = !q ||
+      b.title.toLowerCase().includes(q) ||
+      b.short_description.toLowerCase().includes(q) ||
+      b.subjects.some(s=>s.title.toLowerCase().includes(q));
+    return matchesCat && matchesSearch;
+  });
+
+  document.getElementById('count-line').textContent =
+    `${filtered.length} of ${ALL.length} batches on file`;
+
+  if(!filtered.length){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="display">No match in the manifest</div>
+      <div>Try a different subject or clear the filter.</div>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((b,i)=>{
+    const color = CAT_COLOR[b.category] || 'var(--brass)';
+    return `
+    <article class="card" style="--cat-color:${color}; animation-delay:${Math.min(i*40,300)}ms">
+      <div class="card-head">
+        <span class="cat-tag">${b.category}</span>
+        ${b.is_free ? '<div class="free-stamp">FREE<br>ACCESS</div>' : ''}
+      </div>
+      <h2>${escapeHtml(b.title)}</h2>
+      <p class="desc">${escapeHtml(b.short_description)}</p>
+      <div class="meta-row">
+        <div><b>${b.subject_count}</b>Subjects</div>
+        <div><b>${b.lecture_count}</b>Lectures</div>
+      </div>
+      <details>
+        <summary>View subject files</summary>
+        <ul class="subjects">
+          ${b.subjects.map(s=>`<li>${escapeHtml(s.title)}<span>${s.lecture_count} lec</span></li>`).join('')}
+        </ul>
+      </details>
+    </article>`;
+  }).join('');
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+document.getElementById('search').addEventListener('input', render);
+boot();
+</script>
+</body>
+</html>
