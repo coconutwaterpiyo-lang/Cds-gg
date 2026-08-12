@@ -281,20 +281,24 @@
     border-bottom:1px dashed var(--line);
   }
   .subject-item:last-child{border-bottom:none;}
-  .subj-link{
+  .subj-btn{
+    all:unset;
+    box-sizing:border-box;
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:10px;
+    width:100%;
     padding:9px 2px;
     font-size:.84rem;
     color:var(--bone);
-    text-decoration:none;
+    cursor:pointer;
     -webkit-tap-highlight-color:rgba(199,160,52,.15);
   }
-  .subj-link:active,
-  .subj-link:focus-visible{ color:var(--brass); }
-  .subj-link .lec{
+  .subj-btn:active,
+  .subj-btn:focus-visible{ color:var(--brass); }
+  .subj-btn.active{ color:var(--khaki); }
+  .subj-btn .lec{
     color:var(--bone-dim);
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     font-size:.78rem;
@@ -303,10 +307,47 @@
     align-items:center;
     gap:6px;
   }
-  .subj-link .chev{
+  .subj-btn .chev{
     color:var(--brass);
-    font-size:.9rem;
+    font-size:.85rem;
+    transition:transform .2s;
+    display:inline-block;
   }
+  .subj-btn.active .chev{ transform:rotate(90deg); }
+
+  .lecture-list{
+    margin:0 0 10px;
+    padding-left:10px;
+    border-left:2px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .lecture-link{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:7px 8px;
+    font-size:.78rem;
+    color:var(--bone-dim);
+    text-decoration:none;
+    border-radius:2px;
+  }
+  .lecture-link:active,
+  .lecture-link:focus-visible{ background:var(--panel-hi); color:var(--brass); }
+  .lecture-link .lec-date{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.7rem;
+    flex:0 0 auto;
+  }
+  .lecture-link.disabled{ opacity:.5; cursor:default; }
+  .loading-row{
+    padding:9px 8px;
+    font-size:.78rem;
+    color:var(--bone-dim);
+  }
+  .loading-row a{ color:var(--brass); }
 
   .empty{
     text-align:center;
@@ -439,10 +480,11 @@ function render(){
         <summary>View subject files</summary>
         <ul class="subjects">
           ${b.subjects.map(s=>`<li class="subject-item">
-            <a class="subj-link" href="${SUBJECT_PAGE}${encodeURIComponent(s.id)}" target="_blank" rel="noopener noreferrer">
+            <button class="subj-btn" data-sid="${escapeAttr(s.id)}">
               <span>${escapeHtml(s.title)}</span>
-              <span class="lec">${s.lecture_count} lec <span class="chev">›</span></span>
-            </a>
+              <span class="lec">${s.lecture_count} lec <span class="chev">▸</span></span>
+            </button>
+            <div class="lecture-list" hidden></div>
           </li>`).join('')}
         </ul>
       </details>
@@ -453,6 +495,63 @@ function render(){
 function escapeAttr(str){
   return String(str).replace(/"/g,'&quot;');
 }
+
+let LECTURE_DATA = null;
+async function loadLectureData(){
+  if (LECTURE_DATA) return LECTURE_DATA;
+  try {
+    const res = await fetch('lecture.json');
+    LECTURE_DATA = await res.json();
+  } catch(e) {
+    LECTURE_DATA = {};
+  }
+  return LECTURE_DATA;
+}
+
+async function loadLectures(btn, wrap){
+  const sid = btn.dataset.sid;
+  const isOpen = !wrap.hidden;
+
+  if(isOpen){
+    wrap.hidden = true;
+    btn.classList.remove('active');
+    return;
+  }
+  wrap.hidden = false;
+  btn.classList.add('active');
+
+  if(wrap.dataset.loaded) return;
+
+  wrap.innerHTML = '<div class="loading-row">Loading lectures…</div>';
+  const data = await loadLectureData();
+  const entry = data[sid];
+
+  if(!entry || !entry.lectures || !entry.lectures.length){
+    wrap.innerHTML = `<div class="loading-row">Not indexed yet —
+      <a href="${SUBJECT_PAGE}${encodeURIComponent(sid)}" target="_blank" rel="noopener noreferrer">open on source ↗</a>
+    </div>`;
+    wrap.dataset.loaded = '1';
+    return;
+  }
+
+  wrap.innerHTML = entry.lectures.map(lec=>{
+    if(lec.url){
+      return `<a class="lecture-link" href="${escapeAttr(lec.url)}" target="_blank" rel="noopener noreferrer">
+        <span>${escapeHtml(lec.title)}</span>
+        <span class="lec-date"><span class="chev">▸</span></span>
+      </a>`;
+    }
+    return `<div class="lecture-link disabled"><span>${escapeHtml(lec.title)}</span><span class="lec-date">unavailable</span></div>`;
+  }).join('');
+  wrap.dataset.loaded = '1';
+}
+
+document.getElementById('grid').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.subj-btn');
+  if(!btn) return;
+  const wrap = btn.nextElementSibling;
+  loadLectures(btn, wrap);
+});
 
 function escapeHtml(str){
   const d = document.createElement('div');
