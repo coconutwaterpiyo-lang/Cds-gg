@@ -536,6 +536,7 @@
             height: 100%;
             border: 0;
             background: #0f1020;
+            pointer-events: auto;
         }
         .player-card:fullscreen,
         .player-card:-webkit-full-screen {
@@ -543,11 +544,17 @@
             max-height: none;
             width: 100vw;
             height: 100vh;
+            border-radius: 0;
+            margin: 0;
         }
         .player-card:fullscreen iframe,
         .player-card:-webkit-full-screen iframe {
             width: 100%;
             height: 100%;
+        }
+        .player-card:fullscreen .rotate-hint,
+        .player-card:-webkit-full-screen .rotate-hint {
+            display: none;
         }
 
         /* ── rotate hint overlay ── */
@@ -569,6 +576,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: none;
             text-align: center;
+            transition: opacity .3s;
         }
         @media (max-width: 480px) {
             .rotate-hint {
@@ -1325,7 +1333,6 @@
 
             app.innerHTML = `
                 <div class="player-card" id="play-area">
-                    <!-- rotate hint - always visible inside the player -->
                     <div class="rotate-hint">↻ Use auto-rotate for full screen</div>
                     <div class="player-cover" id="player-cover">
                         <div class="play-circle">
@@ -1360,29 +1367,38 @@
                 </div>
             `;
 
-            // player - click to play
-            document.getElementById('player-cover').addEventListener('click', function() {
+            const playerCard = document.getElementById('play-area');
+            const cover = document.getElementById('player-cover');
+            const fallback = document.getElementById('player-fallback');
+
+            // ─── player: click cover → play ──────────────────────
+            cover.addEventListener('click', function() {
                 if (!lec.url) return;
-                const area = document.getElementById('play-area');
-                const fallback = document.getElementById('player-fallback');
 
                 const iframe = document.createElement('iframe');
                 iframe.src = lec.url;
                 iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-                iframe.allowFullscreen = false;
+                // Allow fullscreen so the video player's native fullscreen button works
+                iframe.allowFullscreen = true;
 
                 let loaded = false;
-                iframe.addEventListener('load', function() { loaded = true;
-                    fallback.classList.remove('show'); });
-                area.insertBefore(iframe, area.firstChild);
-                document.getElementById('player-cover').classList.add('hidden');
+                iframe.addEventListener('load', function() {
+                    loaded = true;
+                    fallback.classList.remove('show');
+                });
 
-                setTimeout(() => { if (!loaded) fallback.classList.add('show'); }, 6000);
+                playerCard.insertBefore(iframe, playerCard.firstChild);
+                cover.classList.add('hidden');
 
-                // No fullscreen button — we show the rotate hint instead
+                // Remove any fullscreen icon we might have added (none now)
+                // We keep the rotate hint visible
+
+                setTimeout(() => {
+                    if (!loaded) fallback.classList.add('show');
+                }, 6000);
             });
 
-            // done button
+            // ─── done button ──────────────────────────────────────
             const doneBtn = document.getElementById('done-btn');
             doneBtn.addEventListener('click', function() {
                 const nowDone = !isDone(k);
@@ -1394,7 +1410,7 @@
                     'Not completed yet — finish the class and mark it done.';
             });
 
-            // tabs
+            // ─── tabs ──────────────────────────────────────────────
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.tab-btn').forEach(b2 => b2.classList.remove('active'));
@@ -1404,7 +1420,7 @@
                 });
             });
 
-            // notes
+            // ─── notes ─────────────────────────────────────────────
             function refreshNotes() {
                 const notes = getNotes(k);
                 document.getElementById('notes-count').textContent = 'SAVED NOTES (' + notes.length + ')';
