@@ -724,39 +724,42 @@
         .gate-overlay {
             position: fixed;
             inset: 0;
-            z-index: 100;
-            background: rgba(20, 15, 45, .55);
+            z-index: 9999;
+            background: rgba(20, 15, 45, .6);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            animation: fadeIn .18s ease;
+            animation: fadeIn .2s ease;
+            backdrop-filter: blur(2px);
         }
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: scale(.96);
             }
             to {
                 opacity: 1;
+                transform: scale(1);
             }
         }
         .gate-card {
             background: var(--panel);
             border-radius: var(--radius-lg);
-            padding: 26px 22px;
+            padding: 28px 24px;
             max-width: 380px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
         }
         .gate-icon {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 2.4rem;
+            margin-bottom: 6px;
         }
         .gate-card h3 {
             font-family: 'Poppins';
             margin: 0 0 6px;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 800;
         }
         .gate-card p {
@@ -786,7 +789,7 @@
             text-decoration: none;
             margin-bottom: 10px;
             box-sizing: border-box;
-            transition: background .15s;
+            transition: background .15s, transform .1s;
         }
         .gate-btn.primary {
             background: var(--primary);
@@ -833,13 +836,34 @@
             border-radius: 20px;
             margin-top: 6px;
         }
+        .gate-btn.done {
+            background: #e9fbf2;
+            color: var(--green);
+            border-color: var(--green);
+            cursor: default;
+        }
 
-        /* ── footer ── */
+        /* ── footer reset link ── */
+        .reset-link {
+            color: var(--ink-dim);
+            text-decoration: underline dotted;
+            cursor: pointer;
+            font-size: .7rem;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        .reset-link:hover {
+            color: var(--ink);
+        }
         footer {
             text-align: center;
             padding: 26px 18px 10px;
             color: var(--ink-dim);
             font-size: .72rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
         }
     </style>
 </head>
@@ -847,7 +871,10 @@
 
     <div class="topbar" id="topbar"></div>
     <main id="app"></main>
-    <footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
+    <footer>
+        <span>Filed locally from data.json · updates when the manifest is redeployed</span>
+        <span class="reset-link" id="resetUnlock">⟳ Reset unlock (clear gate state)</span>
+    </footer>
 
     <script>
         // ─── constants ──────────────────────────────────────────────
@@ -946,13 +973,22 @@
 
         function setShareDone() { localStorage.setItem('share_done', '1'); }
 
+        // Reset function for testing
+        function resetUnlock() {
+            localStorage.removeItem('cds_unlocked');
+            localStorage.removeItem('cds_gate_shown');
+            localStorage.removeItem('wa_done');
+            localStorage.removeItem('share_done');
+            alert('Unlock state reset. Reloading…');
+            location.reload();
+        }
+
         // ─── gate modal ─────────────────────────────────────────────
         function showGateModal(idx, onDone) {
             const overlay = document.createElement('div');
             overlay.className = 'gate-overlay';
             document.body.appendChild(overlay);
 
-            // Determine if skip is allowed: only if user has seen the gate before AND not unlocked
             const showSkip = hasSeenGate() && !isUnlocked();
 
             function finish() {
@@ -978,10 +1014,10 @@
                         <h3>Join &amp; Share to Continue</h3>
                         <p>Do both steps once — it helps us grow and keeps everything free for everyone.</p>
 
-                        <button class="gate-btn primary" id="gate-wa">
+                        <button class="gate-btn ${isWaDone() ? 'done' : 'primary'}" id="gate-wa">
                             ${isWaDone() ? '✅ WhatsApp Joined' : '💬 Join WhatsApp Channel'}
                         </button>
-                        <button class="gate-btn primary" id="gate-share">
+                        <button class="gate-btn ${isShareDone() ? 'done' : 'primary'}" id="gate-share">
                             ${isShareDone() ? '✅ Shared' : '🔗 Share this App'}
                         </button>
 
@@ -989,24 +1025,21 @@
 
                         ${showSkip ? `<button class="gate-btn secondary" id="gate-skip">Skip for now</button>` : `
                             <div style="font-size:.7rem;color:var(--ink-dim);margin-top:4px;">
-                                <span>⚡ First time — complete both to unlock</span>
+                                ⚡ First time — complete both to unlock
                             </div>
                         `}
                         ${isUnlocked() ? `<div class="gate-badge">✓ Already unlocked</div>` : ''}
                     </div>
                 `;
 
-                // WhatsApp button
                 document.getElementById('gate-wa').addEventListener('click', function() {
                     window.open(WA_CHANNEL, '_blank', 'noopener,noreferrer');
                     setWaDone();
                     markGateSeen();
                     checkAndUnlock();
-                    // Re-render to update button states
                     if (!isUnlocked()) render();
                 });
 
-                // Share button
                 document.getElementById('gate-share').addEventListener('click', async function() {
                     if (navigator.share) {
                         try {
@@ -1030,12 +1063,10 @@
                     if (!isUnlocked()) render();
                 });
 
-                // Skip button
                 const skipBtn = document.getElementById('gate-skip');
                 if (skipBtn) {
                     skipBtn.addEventListener('click', function() {
                         overlay.remove();
-                        // Navigate to batch without unlocking
                         if (idx !== null && idx !== undefined) {
                             location.hash = '#/batch/' + idx;
                         }
@@ -1061,6 +1092,10 @@
             const data = await res.json();
             ALL = data.batches;
             window.addEventListener('hashchange', route);
+
+            // Reset link
+            document.getElementById('resetUnlock').addEventListener('click', resetUnlock);
+
             route();
         }
 
