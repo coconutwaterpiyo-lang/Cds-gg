@@ -496,14 +496,42 @@ function escapeAttr(str){
   return String(str).replace(/"/g,'&quot;');
 }
 
+function decodeJwtPayload(token){
+  try {
+    const part = String(token).split('.')[1];
+    if(!part) return null;
+    const b64 = part.replace(/-/g,'+').replace(/_/g,'/');
+    const pad = b64.length % 4 ? '='.repeat(4 - (b64.length % 4)) : '';
+    const json = decodeURIComponent(atob(b64 + pad).split('').map(c=>
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    ).join(''));
+    return JSON.parse(json);
+  } catch(e){
+    return null;
+  }
+}
+
+function jwtKey(token){
+  const p = decodeJwtPayload(token);
+  if(!p || !p.batch_id || !p.subject_id) return null;
+  return p.batch_id + '::' + p.subject_id;
+}
+
 let LECTURE_DATA = null;
+let LECTURE_INDEX = null; // batch_id::subject_id -> entry
 async function loadLectureData(){
   if (LECTURE_DATA) return LECTURE_DATA;
   try {
     const res = await fetch('lecture.json');
     LECTURE_DATA = await res.json();
+    LECTURE_INDEX = {};
+    for(const rawKey in LECTURE_DATA){
+      const k = jwtKey(rawKey);
+      if(k) LECTURE_INDEX[k] = LECTURE_DATA[rawKey];
+    }
   } catch(e) {
     LECTURE_DATA = {};
+    LECTURE_INDEX = {};
   }
   return LECTURE_DATA;
 }
@@ -523,8 +551,9 @@ async function loadLectures(btn, wrap){
   if(wrap.dataset.loaded) return;
 
   wrap.innerHTML = '<div class="loading-row">Loading lectures…</div>';
-  const data = await loadLectureData();
-  const entry = data[sid];
+  await loadLectureData();
+  const key = jwtKey(sid);
+  const entry = key ? LECTURE_INDEX[key] : LECTURE_DATA[sid];
 
   if(!entry || !entry.lectures || !entry.lectures.length){
     wrap.innerHTML = `<div class="loading-row">Not indexed yet —
