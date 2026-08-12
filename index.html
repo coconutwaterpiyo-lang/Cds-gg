@@ -394,8 +394,9 @@
 <footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
 
 <script>
-const SUBJECT_API = '/api/subject?token=';
-const SUBJECT_PAGE = 'https://cds.streamfiles.eu.org/#/subject/';
+const SUBJECT_API = 'https://cds.streamfiles.eu.org/api.php?action=subject&token=';
+// Use a public CORS proxy to bypass CORS restrictions
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 const CAT_COLOR = {
   CDS:   'var(--brass)',
@@ -500,23 +501,16 @@ function escapeAttr(str){
 }
 
 function decodeJwtPayload(token){
-  const part = token.split('.')[1];
-  const base64 = part.replace(/-/g,'+').replace(/_/g,'/');
-  const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
-  const raw = atob(padded);
-  const json = decodeURIComponent(
-    raw.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
-  );
-  return JSON.parse(json);
-}
-
-function extractZoomUrl(redirectPath){
-  // redirectPath looks like: api.php?action=redirect&token=<jwt>
-  const qs = redirectPath.slice(redirectPath.indexOf('?') + 1);
-  const token = new URLSearchParams(qs).get('token');
-  if(!token) return null;
-  const payload = decodeJwtPayload(token);
-  return payload && payload.url ? payload.url : null;
+  try{
+    const part = token.split('.')[1];
+    const base64 = part.replace(/-/g,'+').replace(/_/g,'/');
+    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+    const raw = atob(padded);
+    const json = decodeURIComponent(
+      raw.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
+    );
+    return JSON.parse(json);
+  }catch(e){ return null; }
 }
 
 async function loadLectures(btn, wrap){
@@ -535,8 +529,10 @@ async function loadLectures(btn, wrap){
 
   wrap.innerHTML = '<div class="loading-row">Loading lectures…</div>';
   try{
-    const res = await fetch(SUBJECT_API + encodeURIComponent(sid));
-    if(!res.ok) throw new Error('bad status');
+    const targetUrl = SUBJECT_API + encodeURIComponent(sid);
+    const proxyUrl = CORS_PROXY + encodeURIComponent(targetUrl);
+    const res = await fetch(proxyUrl);
+    if(!res.ok) throw new Error('Proxy failed');
     const data = await res.json();
     const lectures = (data.folder_data && data.folder_data.lectures) || [];
 
@@ -548,7 +544,15 @@ async function loadLectures(btn, wrap){
 
     wrap.innerHTML = lectures.map(lec=>{
       let zoomUrl = null;
-      try{ zoomUrl = extractZoomUrl(lec.url || ''); }catch(e){}
+      try{
+        if(lec.url && lec.url.includes('token=')){
+          const token = new URL(lec.url, 'https://dummy.com').searchParams.get('token');
+          if(token){
+            const payload = decodeJwtPayload(token);
+            if(payload && payload.url) zoomUrl = payload.url;
+          }
+        }
+      }catch(e){}
       const dateStr = lec.start_date
         ? new Date(lec.start_date).toLocaleDateString('en-IN',{day:'2-digit',month:'short'})
         : '';
@@ -565,9 +569,7 @@ async function loadLectures(btn, wrap){
     }).join('');
     wrap.dataset.loaded = '1';
   }catch(err){
-    wrap.innerHTML = `<div class="loading-row">Couldn't load directly —
-      <a href="${SUBJECT_PAGE}${encodeURIComponent(sid)}" target="_blank" rel="noopener noreferrer">open on source ↗</a>
-    </div>`;
+    wrap.innerHTML = `<div class="loading-row">Couldn't load — proxy might be blocked. Try later.</div>`;
   }
 }
 
