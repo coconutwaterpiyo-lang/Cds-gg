@@ -281,24 +281,20 @@
     border-bottom:1px dashed var(--line);
   }
   .subject-item:last-child{border-bottom:none;}
-  .subj-btn{
-    all:unset;
-    box-sizing:border-box;
+  .subj-link{
     display:flex;
     justify-content:space-between;
     align-items:center;
     gap:10px;
-    width:100%;
     padding:9px 2px;
     font-size:.84rem;
     color:var(--bone);
-    cursor:pointer;
+    text-decoration:none;
     -webkit-tap-highlight-color:rgba(199,160,52,.15);
   }
-  .subj-btn:active,
-  .subj-btn:focus-visible{ color:var(--brass); }
-  .subj-btn.active{ color:var(--khaki); }
-  .subj-btn .lec{
+  .subj-link:active,
+  .subj-link:focus-visible{ color:var(--brass); }
+  .subj-link .lec{
     color:var(--bone-dim);
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     font-size:.78rem;
@@ -307,50 +303,10 @@
     align-items:center;
     gap:6px;
   }
-  .subj-btn .chev{
+  .subj-link .chev{
     color:var(--brass);
-    font-size:.85rem;
-    transition:transform .2s;
-    display:inline-block;
+    font-size:.9rem;
   }
-  .subj-btn.active .chev{ transform:rotate(90deg); }
-
-  .lecture-list{
-    margin:0 0 10px;
-    padding-left:10px;
-    border-left:2px solid var(--line);
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .lecture-link{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    padding:7px 8px;
-    font-size:.78rem;
-    color:var(--bone-dim);
-    text-decoration:none;
-    border-radius:2px;
-  }
-  .lecture-link:active,
-  .lecture-link:focus-visible{ background:var(--panel-hi); color:var(--brass); }
-  .lecture-link .lec-date{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:.7rem;
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-  .lecture-link.disabled{ opacity:.5; cursor:default; }
-  .loading-row{
-    padding:9px 8px;
-    font-size:.78rem;
-    color:var(--bone-dim);
-  }
-  .loading-row a{ color:var(--brass); }
 
   .empty{
     text-align:center;
@@ -394,9 +350,8 @@
 <footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
 
 <script>
-const SUBJECT_API = 'https://cds.streamfiles.eu.org/api.php?action=subject&token=';
-// Use a public CORS proxy to bypass CORS restrictions
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const SUBJECT_API = '/api/subject?token=';
+const SUBJECT_PAGE = 'https://cds.streamfiles.eu.org/#/subject/';
 
 const CAT_COLOR = {
   CDS:   'var(--brass)',
@@ -484,11 +439,10 @@ function render(){
         <summary>View subject files</summary>
         <ul class="subjects">
           ${b.subjects.map(s=>`<li class="subject-item">
-            <button class="subj-btn" data-sid="${escapeAttr(s.id)}">
+            <a class="subj-link" href="${SUBJECT_PAGE}${encodeURIComponent(s.id)}" target="_blank" rel="noopener noreferrer">
               <span>${escapeHtml(s.title)}</span>
-              <span class="lec">${s.lecture_count} lec <span class="chev">▸</span></span>
-            </button>
-            <div class="lecture-list" hidden></div>
+              <span class="lec">${s.lecture_count} lec <span class="chev">›</span></span>
+            </a>
           </li>`).join('')}
         </ul>
       </details>
@@ -499,86 +453,6 @@ function render(){
 function escapeAttr(str){
   return String(str).replace(/"/g,'&quot;');
 }
-
-function decodeJwtPayload(token){
-  try{
-    const part = token.split('.')[1];
-    const base64 = part.replace(/-/g,'+').replace(/_/g,'/');
-    const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
-    const raw = atob(padded);
-    const json = decodeURIComponent(
-      raw.split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
-    );
-    return JSON.parse(json);
-  }catch(e){ return null; }
-}
-
-async function loadLectures(btn, wrap){
-  const sid = btn.dataset.sid;
-  const isOpen = !wrap.hidden;
-
-  if(isOpen){
-    wrap.hidden = true;
-    btn.classList.remove('active');
-    return;
-  }
-  wrap.hidden = false;
-  btn.classList.add('active');
-
-  if(wrap.dataset.loaded) return;
-
-  wrap.innerHTML = '<div class="loading-row">Loading lectures…</div>';
-  try{
-    const targetUrl = SUBJECT_API + encodeURIComponent(sid);
-    const proxyUrl = CORS_PROXY + encodeURIComponent(targetUrl);
-    const res = await fetch(proxyUrl);
-    if(!res.ok) throw new Error('Proxy failed');
-    const data = await res.json();
-    const lectures = (data.folder_data && data.folder_data.lectures) || [];
-
-    if(!lectures.length){
-      wrap.innerHTML = '<div class="loading-row">No lectures listed.</div>';
-      wrap.dataset.loaded = '1';
-      return;
-    }
-
-    wrap.innerHTML = lectures.map(lec=>{
-      let zoomUrl = null;
-      try{
-        if(lec.url && lec.url.includes('token=')){
-          const token = new URL(lec.url, 'https://dummy.com').searchParams.get('token');
-          if(token){
-            const payload = decodeJwtPayload(token);
-            if(payload && payload.url) zoomUrl = payload.url;
-          }
-        }
-      }catch(e){}
-      const dateStr = lec.start_date
-        ? new Date(lec.start_date).toLocaleDateString('en-IN',{day:'2-digit',month:'short'})
-        : '';
-      if(zoomUrl){
-        return `<a class="lecture-link" href="${escapeAttr(zoomUrl)}" target="_blank" rel="noopener noreferrer">
-          <span>${escapeHtml(lec.title)}</span>
-          <span class="lec-date">${dateStr}<span class="chev">▸</span></span>
-        </a>`;
-      }
-      return `<div class="lecture-link disabled">
-        <span>${escapeHtml(lec.title)}</span>
-        <span class="lec-date">unavailable</span>
-      </div>`;
-    }).join('');
-    wrap.dataset.loaded = '1';
-  }catch(err){
-    wrap.innerHTML = `<div class="loading-row">Couldn't load — proxy might be blocked. Try later.</div>`;
-  }
-}
-
-document.getElementById('grid').addEventListener('click', (e)=>{
-  const btn = e.target.closest('.subj-btn');
-  if(!btn) return;
-  const wrap = btn.nextElementSibling;
-  loadLectures(btn, wrap);
-});
 
 function escapeHtml(str){
   const d = document.createElement('div');
