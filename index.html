@@ -875,27 +875,15 @@
             cursor: default;
         }
 
-        /* ── footer reset link ── */
-        .reset-link {
-            color: var(--ink-dim);
-            text-decoration: underline dotted;
-            cursor: pointer;
-            font-size: .7rem;
-            margin-top: 8px;
-            display: inline-block;
-        }
-        .reset-link:hover {
-            color: var(--ink);
-        }
+        /* ── footer ── */
         footer {
             text-align: center;
             padding: 26px 18px 10px;
             color: var(--ink-dim);
             font-size: .72rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
+        }
+        footer span {
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -904,8 +892,7 @@
     <div class="topbar" id="topbar"></div>
     <main id="app"></main>
     <footer>
-        <span>Filed locally from data.json · updates when the manifest is redeployed</span>
-        <span class="reset-link" id="resetUnlock">⟳ Reset unlock (clear gate state)</span>
+        <span>CDS Journey</span>
     </footer>
 
     <script>
@@ -1005,16 +992,6 @@
         function isShareDone() { return localStorage.getItem('share_done') === '1'; }
 
         function setShareDone() { localStorage.setItem('share_done', '1'); }
-
-        // Reset function for testing
-        function resetUnlock() {
-            localStorage.removeItem('cds_unlocked');
-            localStorage.removeItem('cds_gate_shown');
-            localStorage.removeItem('wa_done');
-            localStorage.removeItem('share_done');
-            alert('Unlock state reset. Reloading…');
-            location.reload();
-        }
 
         // ─── gate modal ─────────────────────────────────────────────
         function showGateModal(idx, onDone) {
@@ -1125,10 +1102,6 @@
             const data = await res.json();
             ALL = data.batches;
             window.addEventListener('hashchange', route);
-
-            // Reset link
-            document.getElementById('resetUnlock').addEventListener('click', resetUnlock);
-
             route();
         }
 
