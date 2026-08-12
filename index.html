@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Defence Prep Archive</title>
+<title>CDS Journey</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -182,22 +182,31 @@
   .player-card{
     border-radius:var(--radius-lg); overflow:hidden; background:#0f1020;
     box-shadow:var(--shadow); position:relative; aspect-ratio:16/9;
-    display:flex; align-items:center; justify-content:center; margin:16px 0; cursor:pointer;
+    margin:16px 0;
   }
-  .player-card::before{
-    content:""; position:absolute; inset:0;
-    background:linear-gradient(135deg,#6f5cf0 0%, #2f2666 100%); opacity:.9;
+  .player-card iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0; background:#0f1020;
   }
-  .player-card .play-circle{
-    position:relative; z-index:1; width:72px;height:72px;border-radius:50%;
+  .player-cover{
+    position:absolute; inset:0; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#6f5cf0 0%, #2f2666 100%);
+    cursor:pointer; transition:opacity .2s;
+  }
+  .player-cover.hidden{ display:none; }
+  .player-cover .play-circle{
+    width:72px;height:72px;border-radius:50%;
     background:rgba(255,255,255,.95); display:flex;align-items:center;justify-content:center;
     box-shadow:0 8px 24px rgba(0,0,0,.25);
   }
-  .player-card .play-circle svg{ margin-left:4px; }
-  .player-card .hint{
-    position:absolute; bottom:12px; left:0; right:0; z-index:1;
-    text-align:center; color:#fff; font-size:.78rem; font-weight:600; opacity:.9;
+  .player-cover .play-circle svg{ margin-left:4px; }
+  .player-fallback{
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:10px; font-size:.8rem; color:var(--ink-dim); background:var(--panel);
+    border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius-lg) var(--radius-lg);
+    margin-top:-16px; position:relative;
   }
+  .player-fallback a{ color:var(--primary); font-weight:700; text-decoration:none; }
 
   .meta-card{
     background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-lg);
@@ -333,7 +342,7 @@ function setTopbar(showBack, backHref, title){
   const bar = document.getElementById('topbar');
   bar.innerHTML = showBack
     ? `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a><div class="brand"><div class="logo">🎓</div></div>`
-    : `<div class="brand"><div class="logo">🎓</div>Defence Prep Archive</div><div></div>`;
+    : `<div class="brand"><div class="logo">🎓</div>CDS Journey</div><div></div>`;
 }
 
 function renderDashboard(){
@@ -509,11 +518,13 @@ async function renderLecturePage(bi, si, li){
 
   app.innerHTML = `
     <div class="player-card" id="play-area">
-      <div class="play-circle">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="#6f5cf0"><path d="M8 5v14l11-7z"/></svg>
+      <div class="player-cover" id="player-cover">
+        <div class="play-circle">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#6f5cf0"><path d="M8 5v14l11-7z"/></svg>
+        </div>
       </div>
-      <div class="hint">Tap to watch on Zoom ↗</div>
     </div>
+    <div class="player-fallback">Video not loading? <a href="${escapeAttr(lec.url||'#')}" target="_blank" rel="noopener noreferrer">Open on Zoom ↗</a></div>
 
     <div class="meta-card">
       <div class="batch-name">${escapeHtml(b.title)} · ${escapeHtml(s.title)}</div>
@@ -540,8 +551,15 @@ async function renderLecturePage(bi, si, li){
     </div>
   `;
 
-  document.getElementById('play-area').addEventListener('click', ()=>{
-    if(lec.url) window.open(lec.url, '_blank', 'noopener,noreferrer');
+  document.getElementById('player-cover').addEventListener('click', ()=>{
+    if(!lec.url) return;
+    const area = document.getElementById('play-area');
+    const iframe = document.createElement('iframe');
+    iframe.src = lec.url;
+    iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
+    iframe.allowFullscreen = true;
+    area.insertBefore(iframe, area.firstChild);
+    document.getElementById('player-cover').classList.add('hidden');
   });
 
   const doneBtn = document.getElementById('done-btn');
