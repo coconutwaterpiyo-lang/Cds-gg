@@ -96,25 +96,27 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            flex-wrap: wrap;
         }
         .social-ic {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: .82rem;
-            font-weight: 700;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             text-decoration: none;
             color: #fff;
             flex: 0 0 auto;
             box-shadow: var(--shadow);
+            transition: transform 0.15s;
+        }
+        .social-ic:hover {
+            transform: scale(1.05);
         }
         .social-ic svg {
-            width: 16px;
-            height: 16px;
-            flex: 0 0 auto;
+            width: 22px;
+            height: 22px;
+            display: block;
         }
         .social-ic.wa {
             background: #25D366;
@@ -1145,18 +1147,16 @@
             }
         }
 
-        // ─── topbar (with social buttons) ──────────────────────────
+        // ─── topbar (only icons, no text) ──────────────────────────
         function setTopbar(showBack, backHref, title) {
             const bar = document.getElementById('topbar');
             const socials = `
                 <div class="social-ics">
-                    <a class="social-ic wa" href="${WA_CHANNEL}" target="_blank" rel="noopener noreferrer" title="Join WhatsApp Channel">
+                    <a class="social-ic wa" href="${WA_CHANNEL}" target="_blank" rel="noopener noreferrer" title="Join WhatsApp Channel" aria-label="WhatsApp">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.2h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 1.67c2.2 0 4.26.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.53-3.7 8.23-8.24 8.23a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23m-4.53 4.7c-.16 0-.43.06-.65.31s-.86.84-.86 2.05.88 2.38 1 2.55c.13.16 1.7 2.73 4.2 3.72 2.08.82 2.5.66 2.95.62.45-.04 1.46-.6 1.66-1.18s.2-1.07.14-1.18c-.06-.1-.23-.16-.48-.29s-1.47-.73-1.7-.81c-.22-.08-.39-.13-.56.13s-.65.81-.8.98c-.15.16-.29.18-.55.06-.26-.13-1.08-.4-2.06-1.28-.76-.68-1.28-1.51-1.42-1.77-.15-.25-.02-.39.11-.51.11-.11.26-.29.38-.44.13-.15.17-.25.26-.42.08-.16.04-.31-.02-.44-.06-.13-.56-1.4-.78-1.9-.2-.5-.42-.43-.56-.44-.15-.01-.32-.01-.48-.01"/></svg>
-                        Join WhatsApp
                     </a>
-                    <a class="social-ic tg" href="${TG_CONTACT}" target="_blank" rel="noopener noreferrer" title="Contact on Telegram">
+                    <a class="social-ic tg" href="${TG_CONTACT}" target="_blank" rel="noopener noreferrer" title="Contact on Telegram" aria-label="Telegram">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.8 11.6c-1.2.5-1.2 1.2-.2 1.5l4.9 1.5 1.9 5.8c.2.6.4.8.8.8.4 0 .6-.2.9-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8L23.9 5.5c.3-1.2-.5-1.7-1.6-1.2zM8.9 14.4l-1.5-4.7 9.3-5.9-7.8 10.6z"/></svg>
-                        Join Telegram
                     </a>
                 </div>`;
 
