@@ -92,36 +92,7 @@
             border: none;
             padding: 0;
         }
-        .social-ics {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .social-ic {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: .82rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #fff;
-            flex: 0 0 auto;
-            box-shadow: var(--shadow);
-        }
-        .social-ic svg {
-            width: 16px;
-            height: 16px;
-            flex: 0 0 auto;
-        }
-        .social-ic.wa {
-            background: #25D366;
-        }
-        .social-ic.tg {
-            background: #229ED9;
-        }
+        /* social icons removed — only brand remains */
 
         /* ── main layout ── */
         main {
@@ -774,7 +745,7 @@
             background: var(--panel);
             border-radius: var(--radius-lg);
             padding: 26px 22px;
-            max-width: 360px;
+            max-width: 380px;
             width: 100%;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
@@ -785,14 +756,14 @@
         }
         .gate-card h3 {
             font-family: 'Poppins';
-            margin: 0 0 8px;
+            margin: 0 0 6px;
             font-size: 1.05rem;
             font-weight: 800;
         }
         .gate-card p {
             color: var(--ink-dim);
             font-size: .86rem;
-            margin: 0 0 18px;
+            margin: 0 0 16px;
         }
         .gate-step {
             font-size: .7rem;
@@ -816,14 +787,52 @@
             text-decoration: none;
             margin-bottom: 10px;
             box-sizing: border-box;
+            transition: background .15s;
         }
         .gate-btn.primary {
             background: var(--primary);
             color: #fff;
             border-color: var(--primary);
         }
+        .gate-btn.primary:hover {
+            background: #5a4ad0;
+        }
+        .gate-btn.secondary {
+            background: transparent;
+            border-color: transparent;
+            color: var(--ink-dim);
+            font-weight: 600;
+        }
+        .gate-btn.secondary:hover {
+            color: var(--ink);
+        }
         .gate-btn:last-child {
             margin-bottom: 0;
+        }
+        .gate-divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 14px 0 12px;
+            color: var(--ink-dim);
+            font-size: .75rem;
+        }
+        .gate-divider::before,
+        .gate-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .gate-badge {
+            display: inline-block;
+            background: #e9fbf2;
+            color: var(--green);
+            font-size: .7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
         }
 
         /* ── footer ── */
@@ -846,7 +855,6 @@
         const SUBJECT_PAGE = 'https://cds.streamfiles.eu.org/#/subject/';
         const THUMB = 'doraemon.jpg';
         const WA_CHANNEL = 'https://whatsapp.com/channel/0029Vb8GF3R1yT2IWoigVQ0h';
-        const TG_CONTACT = 'https://t.me/do2006rabot';
         const SITE_URL = 'https://doracdsjourney.vercel.app/';
 
         let ALL = [];
@@ -922,16 +930,23 @@
             else localStorage.removeItem('done:' + k);
         }
 
+        // ─── gate state ─────────────────────────────────────────────
         function isUnlocked() { return localStorage.getItem('cds_unlocked') === '1'; }
 
         function setUnlocked() { localStorage.setItem('cds_unlocked', '1'); }
 
-        // ─── gate modal — NO SKIP BUTTONS ──────────────────────────
+        function hasSeenGate() { return localStorage.getItem('cds_gate_shown') === '1'; }
+
+        function markGateSeen() { localStorage.setItem('cds_gate_shown', '1'); }
+
+        // ─── gate modal — both steps in one view ───────────────────
         function showGateModal(idx, onDone) {
-            let step = 1;
             const overlay = document.createElement('div');
             overlay.className = 'gate-overlay';
             document.body.appendChild(overlay);
+
+            // Determine if we show skip: only if user has seen the gate before AND is not unlocked
+            const showSkip = hasSeenGate() && !isUnlocked();
 
             function finish() {
                 setUnlocked();
@@ -942,66 +957,88 @@
                 if (onDone) onDone();
             }
 
-            function renderStep() {
-                overlay.innerHTML = step === 1 ?
-                    `
+            function render() {
+                overlay.innerHTML = `
                     <div class="gate-card">
-                        <div class="gate-icon">💬</div>
-                        <div class="gate-step">Step 1 of 2</div>
-                        <h3>Join our WhatsApp Channel</h3>
-                        <p>Join the channel first — it only takes a second — to unlock every batch.</p>
-                        <button class="gate-btn primary" id="gate-join">Join WhatsApp Channel ↗</button>
-                    </div>` :
-                    `
-                    <div class="gate-card">
-                        <div class="gate-icon">🔗</div>
-                        <div class="gate-step">Step 2 of 2</div>
-                        <h3>Share With Your Friends</h3>
-                        <p>Share CDS Journey with a couple of friends, then open this batch.</p>
-                        <button class="gate-btn primary" id="gate-share">Share App</button>
-                    </div>`;
+                        <div class="gate-icon">🚀</div>
+                        <div class="gate-step">✦ Unlock Access ✦</div>
+                        <h3>Join &amp; Share to Continue</h3>
+                        <p>Do both steps once — it helps us grow and keeps everything free for everyone.</p>
 
-                if (step === 1) {
-                    document.getElementById('gate-join').addEventListener('click', function(e) {
-                        // open the channel
-                        window.open(WA_CHANNEL, '_blank', 'noopener,noreferrer');
-                        // advance to step 2
-                        step = 2;
-                        renderStep();
-                    });
-                } else {
-                    document.getElementById('gate-share').addEventListener('click', async function(e) {
-                        // share
-                        if (navigator.share) {
-                            try {
-                                await navigator.share({
-                                    title: 'CDS Journey',
-                                    text: 'Free CDS/NDA/CAPF/AFCAT batches — check this out!',
-                                    url: SITE_URL
-                                });
-                            } catch (err) { /* user cancelled, ignore */ }
-                        } else {
-                            try {
-                                await navigator.clipboard.writeText(SITE_URL);
-                                alert('Link copied! Paste it anywhere to share.');
-                            } catch (err) {
-                                prompt('Copy this link to share:', SITE_URL);
-                            }
+                        <button class="gate-btn primary" id="gate-wa">💬 Join WhatsApp Channel</button>
+                        <button class="gate-btn primary" id="gate-share">🔗 Share this App</button>
+
+                        <div class="gate-divider">— or —</div>
+
+                        ${showSkip ? `<button class="gate-btn secondary" id="gate-skip">Skip for now</button>` : `
+                            <div style="font-size:.7rem;color:var(--ink-dim);margin-top:4px;">
+                                <span>⚡ First time — complete both to unlock</span>
+                            </div>
+                        `}
+                        ${isUnlocked() ? `<div class="gate-badge">✓ Already unlocked</div>` : ''}
+                    </div>
+                `;
+
+                // WhatsApp button
+                document.getElementById('gate-wa').addEventListener('click', function() {
+                    window.open(WA_CHANNEL, '_blank', 'noopener,noreferrer');
+                    // Mark as seen but not unlocked yet
+                    markGateSeen();
+                    // Re-render to show skip option if not unlocked
+                    if (!isUnlocked()) {
+                        render();
+                    }
+                });
+
+                // Share button
+                document.getElementById('gate-share').addEventListener('click', async function() {
+                    if (navigator.share) {
+                        try {
+                            await navigator.share({
+                                title: 'CDS Journey',
+                                text: 'Free CDS/NDA/CAPF/AFCAT batches — check this out!',
+                                url: SITE_URL
+                            });
+                        } catch (err) { /* user cancelled */ }
+                    } else {
+                        try {
+                            await navigator.clipboard.writeText(SITE_URL);
+                            alert('Link copied! Paste it anywhere to share.');
+                        } catch (err) {
+                            prompt('Copy this link to share:', SITE_URL);
                         }
-                        // unlock
-                        finish();
+                    }
+                    markGateSeen();
+                    if (!isUnlocked()) {
+                        render();
+                    }
+                });
+
+                // Skip button (only if shown)
+                const skipBtn = document.getElementById('gate-skip');
+                if (skipBtn) {
+                    skipBtn.addEventListener('click', function() {
+                        overlay.remove();
+                        // Still go to the batch, but don't unlock
+                        if (idx !== null && idx !== undefined) {
+                            location.hash = '#/batch/' + idx;
+                        }
+                        if (onDone) onDone();
                     });
                 }
             }
-            renderStep();
+
+            render();
         }
 
         // ─── routing ────────────────────────────────────────────────
         function handleExplore(idx) {
+            // If unlocked → go straight to batch
             if (isUnlocked()) {
                 location.hash = '#/batch/' + idx;
                 return;
             }
+            // Otherwise show gate
             showGateModal(idx);
         }
 
@@ -1010,11 +1047,8 @@
             const data = await res.json();
             ALL = data.batches;
             window.addEventListener('hashchange', route);
-            if (!isUnlocked()) {
-                showGateModal(null, route);
-            } else {
-                route();
-            }
+            // Always render dashboard first — gate only appears on explore
+            route();
         }
 
         function route() {
@@ -1032,23 +1066,12 @@
             }
         }
 
-        // ─── topbar ──────────────────────────────────────────────────
+        // ─── topbar (no social icons) ──────────────────────────────
         function setTopbar(showBack, backHref, title) {
             const bar = document.getElementById('topbar');
-            const socials = `
-                <div class="social-ics">
-                    <a class="social-ic wa" href="${WA_CHANNEL}" target="_blank" rel="noopener noreferrer" title="Join WhatsApp Channel">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.2h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m0 1.67c2.2 0 4.26.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.53-3.7 8.23-8.24 8.23a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23m-4.53 4.7c-.16 0-.43.06-.65.31s-.86.84-.86 2.05.88 2.38 1 2.55c.13.16 1.7 2.73 4.2 3.72 2.08.82 2.5.66 2.95.62.45-.04 1.46-.6 1.66-1.18s.2-1.07.14-1.18c-.06-.1-.23-.16-.48-.29s-1.47-.73-1.7-.81c-.22-.08-.39-.13-.56.13s-.65.81-.8.98c-.15.16-.29.18-.55.06-.26-.13-1.08-.4-2.06-1.28-.76-.68-1.28-1.51-1.42-1.77-.15-.25-.02-.39.11-.51.11-.11.26-.29.38-.44.13-.15.17-.25.26-.42.08-.16.04-.31-.02-.44-.06-.13-.56-1.4-.78-1.9-.2-.5-.42-.43-.56-.44-.15-.01-.32-.01-.48-.01"/></svg>
-                        Join WhatsApp
-                    </a>
-                    <a class="social-ic tg" href="${TG_CONTACT}" target="_blank" rel="noopener noreferrer" title="Contact on Telegram">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 2.8 11.6c-1.2.5-1.2 1.2-.2 1.5l4.9 1.5 1.9 5.8c.2.6.4.8.8.8.4 0 .6-.2.9-.5l2.4-2.3 4.9 3.6c.9.5 1.5.2 1.7-.8L23.9 5.5c.3-1.2-.5-1.7-1.6-1.2zM8.9 14.4l-1.5-4.7 9.3-5.9-7.8 10.6z"/></svg>
-                        Join Telegram
-                    </a>
-                </div>`;
             bar.innerHTML = showBack ?
-                `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a>${socials}` :
-                `<div class="brand"><div class="logo">🎓</div>CDS Journey</div>${socials}`;
+                `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a>` :
+                `<div class="brand"><div class="logo">🎓</div>CDS Journey</div>`;
         }
 
         // ─── dashboard ──────────────────────────────────────────────
