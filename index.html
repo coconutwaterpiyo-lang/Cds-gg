@@ -92,7 +92,6 @@
             border: none;
             padding: 0;
         }
-        /* social icons removed — only brand remains */
 
         /* ── main layout ── */
         main {
@@ -939,13 +938,21 @@
 
         function markGateSeen() { localStorage.setItem('cds_gate_shown', '1'); }
 
-        // ─── gate modal — both steps in one view ───────────────────
+        function isWaDone() { return localStorage.getItem('wa_done') === '1'; }
+
+        function setWaDone() { localStorage.setItem('wa_done', '1'); }
+
+        function isShareDone() { return localStorage.getItem('share_done') === '1'; }
+
+        function setShareDone() { localStorage.setItem('share_done', '1'); }
+
+        // ─── gate modal ─────────────────────────────────────────────
         function showGateModal(idx, onDone) {
             const overlay = document.createElement('div');
             overlay.className = 'gate-overlay';
             document.body.appendChild(overlay);
 
-            // Determine if we show skip: only if user has seen the gate before AND is not unlocked
+            // Determine if skip is allowed: only if user has seen the gate before AND not unlocked
             const showSkip = hasSeenGate() && !isUnlocked();
 
             function finish() {
@@ -957,6 +964,12 @@
                 if (onDone) onDone();
             }
 
+            function checkAndUnlock() {
+                if (isWaDone() && isShareDone()) {
+                    finish();
+                }
+            }
+
             function render() {
                 overlay.innerHTML = `
                     <div class="gate-card">
@@ -965,8 +978,12 @@
                         <h3>Join &amp; Share to Continue</h3>
                         <p>Do both steps once — it helps us grow and keeps everything free for everyone.</p>
 
-                        <button class="gate-btn primary" id="gate-wa">💬 Join WhatsApp Channel</button>
-                        <button class="gate-btn primary" id="gate-share">🔗 Share this App</button>
+                        <button class="gate-btn primary" id="gate-wa">
+                            ${isWaDone() ? '✅ WhatsApp Joined' : '💬 Join WhatsApp Channel'}
+                        </button>
+                        <button class="gate-btn primary" id="gate-share">
+                            ${isShareDone() ? '✅ Shared' : '🔗 Share this App'}
+                        </button>
 
                         <div class="gate-divider">— or —</div>
 
@@ -982,12 +999,11 @@
                 // WhatsApp button
                 document.getElementById('gate-wa').addEventListener('click', function() {
                     window.open(WA_CHANNEL, '_blank', 'noopener,noreferrer');
-                    // Mark as seen but not unlocked yet
+                    setWaDone();
                     markGateSeen();
-                    // Re-render to show skip option if not unlocked
-                    if (!isUnlocked()) {
-                        render();
-                    }
+                    checkAndUnlock();
+                    // Re-render to update button states
+                    if (!isUnlocked()) render();
                 });
 
                 // Share button
@@ -1008,18 +1024,18 @@
                             prompt('Copy this link to share:', SITE_URL);
                         }
                     }
+                    setShareDone();
                     markGateSeen();
-                    if (!isUnlocked()) {
-                        render();
-                    }
+                    checkAndUnlock();
+                    if (!isUnlocked()) render();
                 });
 
-                // Skip button (only if shown)
+                // Skip button
                 const skipBtn = document.getElementById('gate-skip');
                 if (skipBtn) {
                     skipBtn.addEventListener('click', function() {
                         overlay.remove();
-                        // Still go to the batch, but don't unlock
+                        // Navigate to batch without unlocking
                         if (idx !== null && idx !== undefined) {
                             location.hash = '#/batch/' + idx;
                         }
@@ -1033,12 +1049,10 @@
 
         // ─── routing ────────────────────────────────────────────────
         function handleExplore(idx) {
-            // If unlocked → go straight to batch
             if (isUnlocked()) {
                 location.hash = '#/batch/' + idx;
                 return;
             }
-            // Otherwise show gate
             showGateModal(idx);
         }
 
@@ -1047,7 +1061,6 @@
             const data = await res.json();
             ALL = data.batches;
             window.addEventListener('hashchange', route);
-            // Always render dashboard first — gate only appears on explore
             route();
         }
 
@@ -1066,7 +1079,7 @@
             }
         }
 
-        // ─── topbar (no social icons) ──────────────────────────────
+        // ─── topbar (only brand) ────────────────────────────────────
         function setTopbar(showBack, backHref, title) {
             const bar = document.getElementById('topbar');
             bar.innerHTML = showBack ?
