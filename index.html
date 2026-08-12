@@ -53,6 +53,13 @@
     display:inline-flex;align-items:center;gap:6px; color:var(--primary); font-weight:600;
     font-size:.92rem; text-decoration:none; cursor:pointer; background:none;border:none;padding:0;
   }
+  .social-ics{ display:flex; align-items:center; gap:8px; }
+  .social-ic{
+    width:32px;height:32px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    font-size:.95rem; text-decoration:none; color:#fff; flex:0 0 auto; box-shadow:var(--shadow);
+  }
+  .social-ic.wa{ background:#25D366; }
+  .social-ic.tg{ background:#229ED9; }
 
   main{max-width:900px;margin:0 auto;padding:0 16px;}
 
@@ -181,11 +188,25 @@
 
   .player-card{
     border-radius:var(--radius-lg); overflow:hidden; background:#0f1020;
-    box-shadow:var(--shadow); position:relative; aspect-ratio:16/9;
+    box-shadow:var(--shadow); position:relative;
+    aspect-ratio:9/14; max-height:75vh; min-height:340px;
     margin:16px 0;
   }
+  @media(min-width:640px){ .player-card{ aspect-ratio:16/9; max-height:none; } }
   .player-card iframe{
     position:absolute; inset:0; width:100%; height:100%; border:0; background:#0f1020;
+  }
+  .player-card:fullscreen, .player-card:-webkit-full-screen{
+    aspect-ratio:auto; max-height:none; width:100vw; height:100vh;
+  }
+  .player-card:fullscreen iframe, .player-card:-webkit-full-screen iframe{
+    width:100%; height:100%;
+  }
+  .fs-btn{
+    position:absolute; right:10px; bottom:10px; z-index:3;
+    background:rgba(0,0,0,.55); color:#fff; border:none; border-radius:8px;
+    padding:8px 10px; font-size:.8rem; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; gap:5px;
   }
   .player-cover{
     position:absolute; inset:0; z-index:2;
@@ -201,11 +222,12 @@
   }
   .player-cover .play-circle svg{ margin-left:4px; }
   .player-fallback{
-    display:flex; align-items:center; justify-content:center; gap:6px;
+    display:none; align-items:center; justify-content:center; gap:6px;
     padding:10px; font-size:.8rem; color:var(--ink-dim); background:var(--panel);
     border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius-lg) var(--radius-lg);
     margin-top:-16px; position:relative;
   }
+  .player-fallback.show{ display:flex; }
   .player-fallback a{ color:var(--primary); font-weight:700; text-decoration:none; }
 
   .meta-card{
@@ -253,6 +275,28 @@
   .empty-tab{ text-align:center; color:var(--ink-dim); padding:30px 10px; font-size:.86rem; }
 
   footer{ text-align:center; padding:26px 18px 10px; color:var(--ink-dim); font-size:.72rem; }
+
+  .gate-overlay{
+    position:fixed; inset:0; z-index:100; background:rgba(20,15,45,.55);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    animation:fadeIn .18s ease;
+  }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .gate-card{
+    background:var(--panel); border-radius:var(--radius-lg); padding:26px 22px;
+    max-width:340px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.3);
+  }
+  .gate-icon{ font-size:2.2rem; margin-bottom:8px; }
+  .gate-card h3{ font-family:'Poppins'; margin:0 0 8px; font-size:1.05rem; font-weight:800; }
+  .gate-card p{ color:var(--ink-dim); font-size:.86rem; margin:0 0 18px; }
+  .gate-step{ font-size:.7rem; color:var(--primary); font-weight:700; letter-spacing:.05em; text-transform:uppercase; margin-bottom:6px; }
+  .gate-btn{
+    display:block; width:100%; padding:12px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--ink); font-weight:700; font-size:.86rem; cursor:pointer;
+    text-decoration:none; margin-bottom:10px; box-sizing:border-box;
+  }
+  .gate-btn.primary{ background:var(--primary); color:#fff; border-color:var(--primary); }
+  .gate-btn:last-child{ margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -264,6 +308,9 @@
 <script>
 const SUBJECT_PAGE = 'https://cds.streamfiles.eu.org/#/subject/';
 const THUMB = 'doraemon.jpg';
+const WA_CHANNEL = 'https://whatsapp.com/channel/0029Vb8GF3R1yT2IWoigVQ0h';
+const TG_CONTACT = 'https://t.me/do2006rabot';
+const SITE_URL = 'https://doracdsjourney.vercel.app/';
 
 let ALL = [];
 let activeCat = 'ALL';
@@ -315,6 +362,61 @@ function saveNotes(k, notes){ localStorage.setItem('notes:'+k, JSON.stringify(no
 function isDone(k){ return localStorage.getItem('done:'+k) === '1'; }
 function setDone(k, v){ if(v) localStorage.setItem('done:'+k,'1'); else localStorage.removeItem('done:'+k); }
 
+function isUnlocked(){ return localStorage.getItem('cds_unlocked') === '1'; }
+function setUnlocked(){ localStorage.setItem('cds_unlocked', '1'); }
+
+function handleExplore(idx){
+  if(isUnlocked()){ location.hash = '#/batch/'+idx; return; }
+  showGateModal(idx);
+}
+
+function showGateModal(idx){
+  let step = 1;
+  const overlay = document.createElement('div');
+  overlay.className = 'gate-overlay';
+  document.body.appendChild(overlay);
+
+  function renderStep(){
+    overlay.innerHTML = step === 1 ? `
+      <div class="gate-card">
+        <div class="gate-icon">💬</div>
+        <div class="gate-step">Step 1 of 2</div>
+        <h3>Join our WhatsApp Channel</h3>
+        <p>Join the channel first — it only takes a second — to unlock every batch.</p>
+        <a class="gate-btn primary" href="${WA_CHANNEL}" target="_blank" rel="noopener noreferrer">Join WhatsApp Channel ↗</a>
+        <button class="gate-btn" id="gate-next">I've Joined — Continue</button>
+      </div>` : `
+      <div class="gate-card">
+        <div class="gate-icon">🔗</div>
+        <div class="gate-step">Step 2 of 2</div>
+        <h3>Share With Your Friends</h3>
+        <p>Share CDS Journey with a couple of friends, then open this batch.</p>
+        <button class="gate-btn primary" id="gate-share">Share App</button>
+        <button class="gate-btn" id="gate-done">I've Shared — Open Batch</button>
+      </div>`;
+
+    if(step === 1){
+      document.getElementById('gate-next').addEventListener('click', ()=>{ step = 2; renderStep(); });
+    } else {
+      document.getElementById('gate-share').addEventListener('click', async ()=>{
+        if(navigator.share){
+          try{ await navigator.share({ title:'CDS Journey', text:'Free CDS/NDA/CAPF/AFCAT batches — check this out!', url: SITE_URL }); }
+          catch(e){ /* user cancelled share, ignore */ }
+        } else {
+          try{ await navigator.clipboard.writeText(SITE_URL); alert('Link copied! Paste it anywhere to share.'); }
+          catch(e){ prompt('Copy this link to share:', SITE_URL); }
+        }
+      });
+      document.getElementById('gate-done').addEventListener('click', ()=>{
+        setUnlocked();
+        overlay.remove();
+        location.hash = '#/batch/'+idx;
+      });
+    }
+  }
+  renderStep();
+}
+
 async function boot(){
   const res = await fetch('data.json');
   const data = await res.json();
@@ -340,9 +442,14 @@ function route(){
 
 function setTopbar(showBack, backHref, title){
   const bar = document.getElementById('topbar');
+  const socials = `
+    <div class="social-ics">
+      <a class="social-ic wa" href="${WA_CHANNEL}" target="_blank" rel="noopener noreferrer" title="Join WhatsApp Channel">💬</a>
+      <a class="social-ic tg" href="${TG_CONTACT}" target="_blank" rel="noopener noreferrer" title="Contact on Telegram">✈️</a>
+    </div>`;
   bar.innerHTML = showBack
-    ? `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a><div class="brand"><div class="logo">🎓</div></div>`
-    : `<div class="brand"><div class="logo">🎓</div>CDS Journey</div><div></div>`;
+    ? `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a>${socials}`
+    : `<div class="brand"><div class="logo">🎓</div>CDS Journey</div>${socials}`;
 }
 
 function renderDashboard(){
@@ -409,7 +516,7 @@ function renderGrid(){
   }
 
   grid.innerHTML = filtered.map((b,i)=>`
-    <div class="card" style="animation-delay:${Math.min(i*40,300)}ms" onclick="location.hash='#/batch/${b._idx}'">
+    <div class="card" style="animation-delay:${Math.min(i*40,300)}ms" onclick="handleExplore(${b._idx})">
       <div class="thumb-wrap">
         <img src="${THUMB}" alt="${escapeAttr(b.title)}">
         <span class="cat-tag">${b.category}</span>
@@ -524,7 +631,7 @@ async function renderLecturePage(bi, si, li){
         </div>
       </div>
     </div>
-    <div class="player-fallback">Video not loading? <a href="${escapeAttr(lec.url||'#')}" target="_blank" rel="noopener noreferrer">Open on Zoom ↗</a></div>
+    <div class="player-fallback" id="player-fallback">Video not loading? <a href="${escapeAttr(lec.url||'#')}" target="_blank" rel="noopener noreferrer">Open on Zoom ↗</a></div>
 
     <div class="meta-card">
       <div class="batch-name">${escapeHtml(b.title)} · ${escapeHtml(s.title)}</div>
@@ -554,12 +661,38 @@ async function renderLecturePage(bi, si, li){
   document.getElementById('player-cover').addEventListener('click', ()=>{
     if(!lec.url) return;
     const area = document.getElementById('play-area');
+    const fallback = document.getElementById('player-fallback');
+
     const iframe = document.createElement('iframe');
     iframe.src = lec.url;
-    iframe.allow = 'autoplay; fullscreen; encrypted-media; picture-in-picture';
-    iframe.allowFullscreen = true;
+    // Fullscreen is handled by our own button below, not delegated to the
+    // embedded Zoom page — this stops Zoom's own fullscreen control from
+    // forcing an unwanted screen rotation.
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+    iframe.allowFullscreen = false;
+
+    let loaded = false;
+    iframe.addEventListener('load', ()=>{ loaded = true; fallback.classList.remove('show'); });
     area.insertBefore(iframe, area.firstChild);
     document.getElementById('player-cover').classList.add('hidden');
+
+    // Only surface "Open on Zoom" if the embed genuinely hasn't loaded yet.
+    setTimeout(()=>{ if(!loaded) fallback.classList.add('show'); }, 6000);
+
+    const fsBtn = document.createElement('button');
+    fsBtn.className = 'fs-btn';
+    fsBtn.type = 'button';
+    fsBtn.innerHTML = '⛶ Fullscreen';
+    fsBtn.addEventListener('click', ()=>{
+      if(document.fullscreenElement){
+        document.exitFullscreen();
+      } else if(area.requestFullscreen){
+        area.requestFullscreen();
+      } else if(area.webkitRequestFullscreen){
+        area.webkitRequestFullscreen();
+      }
+    });
+    area.appendChild(fsBtn);
   });
 
   const doneBtn = document.getElementById('done-btn');
