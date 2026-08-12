@@ -3,498 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Defence Prep Archive — Batch Manifest</title>
+<title>Defence Prep Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink-black:#15170f;
-    --panel:#1e2216;
-    --panel-hi:#262b1a;
-    --khaki:#d6cd9f;
-    --brass:#c7a034;
-    --signal:#bf4632;
-    --sage:#7c8a5a;
-    --steel:#6b8590;
-    --bone:#eef0e2;
-    --bone-dim:#9aa085;
-    --line:#3a4029;
-    --radius:2px;
+    --bg:#f4f5fb;
+    --panel:#ffffff;
+    --border:#e9e9f4;
+    --ink:#1c1c2b;
+    --ink-dim:#71718a;
+    --primary:#6f5cf0;
+    --primary-dim:#efeafe;
+    --pink:#ff2f7e;
+    --green:#12b76a;
+    --amber:#f5a524;
+    --radius-lg:18px;
+    --radius-md:12px;
+    --shadow:0 6px 20px rgba(30,20,90,.07);
   }
   *{box-sizing:border-box;}
   html{-webkit-tap-highlight-color:transparent;}
   body{
     margin:0;
-    background:
-      radial-gradient(ellipse at top, #1c2015 0%, var(--ink-black) 55%);
-    background-attachment:fixed;
-    color:var(--bone);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     line-height:1.45;
     min-height:100vh;
+    padding-bottom:40px;
   }
-  .display{font-family:'Oswald',-apple-system,sans-serif;text-transform:uppercase;letter-spacing:.04em;}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  .heading{font-family:'Poppins',sans-serif;}
+  a{color:inherit;}
+  button{font-family:inherit;}
 
-  /* ---------- header ---------- */
-  header{
-    padding:28px 18px 18px;
-    border-bottom:1px solid var(--line);
-    position:relative;
-    overflow:hidden;
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px; background:var(--panel); border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:10;
   }
-  header::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-      repeating-linear-gradient(90deg, rgba(199,160,52,.035) 0 1px, transparent 1px 34px);
-    pointer-events:none;
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Poppins'; font-weight:700; font-size:1.15rem; }
+  .brand .logo{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--primary),#a78bfa);
+    display:flex;align-items:center;justify-content:center; font-size:1.1rem;
   }
-  .eyebrow{
-    font-size:.72rem;
-    color:var(--brass);
-    letter-spacing:.22em;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-bottom:6px;
-  }
-  .eyebrow .dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--signal);
-    box-shadow:0 0 6px var(--signal);
-    animation:pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  h1{
-    font-size:clamp(1.7rem,7vw,2.5rem);
-    margin:0 0 6px;
-    font-weight:700;
-    line-height:1;
-  }
-  .sub{
-    color:var(--bone-dim);
-    font-size:.9rem;
-    max-width:46ch;
-  }
-  .stats{
-    margin-top:16px;
-    display:flex;
-    gap:22px;
-    flex-wrap:wrap;
-  }
-  .stat b{
-    display:block;
-    font-family:'Oswald';
-    font-size:1.3rem;
-    color:var(--khaki);
-  }
-  .stat span{
-    font-size:.68rem;
-    letter-spacing:.14em;
-    color:var(--bone-dim);
-    text-transform:uppercase;
+  .back-link{
+    display:inline-flex;align-items:center;gap:6px; color:var(--primary); font-weight:600;
+    font-size:.92rem; text-decoration:none; cursor:pointer; background:none;border:none;padding:0;
   }
 
-  /* ---------- controls ---------- */
-  .controls{
-    position:sticky;
-    top:0;
-    z-index:5;
-    background:rgba(21,23,15,.92);
-    backdrop-filter:blur(6px);
-    padding:12px 18px;
-    border-bottom:1px solid var(--line);
+  main{max-width:900px;margin:0 auto;padding:0 16px;}
+
+  .hero{ padding:22px 2px 4px; }
+  .hero h1{ font-size:1.5rem; margin:0 0 4px; font-weight:800; }
+  .hero p{ color:var(--ink-dim); font-size:.9rem; margin:0 0 16px; max-width:52ch;}
+
+  .stats-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .stat-pill{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:10px 14px; flex:1 1 100px; box-shadow:var(--shadow);
   }
+  .stat-pill b{ display:block; font-family:'Poppins'; font-size:1.15rem; }
+  .stat-pill span{ font-size:.68rem; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.05em; }
+
   #search{
-    width:100%;
-    background:var(--panel);
-    border:1px solid var(--line);
-    color:var(--bone);
-    font-size:.95rem;
-    padding:11px 14px;
-    border-radius:var(--radius);
-    outline:none;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    width:100%; background:var(--panel); border:1px solid var(--border); color:var(--ink);
+    font-size:.92rem; padding:12px 14px; border-radius:12px; outline:none;
+    margin-bottom:10px; box-shadow:var(--shadow);
   }
-  #search::placeholder{color:var(--bone-dim);}
-  #search:focus{border-color:var(--brass);}
-  .chips{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    margin-top:10px;
-    padding-bottom:2px;
-    scrollbar-width:none;
-  }
-  .chips::-webkit-scrollbar{display:none;}
-  .chip{
-    flex:0 0 auto;
-    font-family:'Oswald';
-    font-size:.72rem;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    padding:7px 13px;
-    border:1px solid var(--line);
-    border-radius:20px;
-    color:var(--bone-dim);
-    background:transparent;
-    cursor:pointer;
-    transition:.15s;
-  }
-  .chip:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
-  .chip.active{
-    color:var(--ink-black);
-    background:var(--brass);
-    border-color:var(--brass);
-    font-weight:600;
-  }
+  #search::placeholder{ color:var(--ink-dim); }
+  #search:focus{ border-color:var(--primary); }
 
-  /* ---------- list ---------- */
-  main{padding:16px;}
-  #count-line{
-    color:var(--bone-dim);
-    font-size:.76rem;
-    letter-spacing:.08em;
-    margin:4px 4px 14px;
-    text-transform:uppercase;
+  .chips{ display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:8px; scrollbar-width:none; }
+  .chips::-webkit-scrollbar{ display:none; }
+  .chip{
+    flex:0 0 auto; font-size:.78rem; font-weight:600; letter-spacing:.02em;
+    padding:8px 14px; border:1px solid var(--border); border-radius:20px;
+    color:var(--ink-dim); background:var(--panel); cursor:pointer; transition:.15s;
   }
-  .grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-  @media(min-width:640px){ .grid{grid-template-columns:1fr 1fr;} }
-  @media(min-width:1000px){ .grid{grid-template-columns:1fr 1fr 1fr;} }
+  .chip.active{ color:#fff; background:var(--primary); border-color:var(--primary); }
+
+  #count-line{ color:var(--ink-dim); font-size:.78rem; margin:6px 2px 12px; }
+
+  .grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+  @media(min-width:640px){ .grid{ grid-template-columns:1fr 1fr; } }
+  @media(min-width:960px){ .grid{ grid-template-columns:1fr 1fr 1fr; } }
 
   .card{
-    position:relative;
-    background:var(--panel);
-    border:1px solid var(--line);
-    clip-path:polygon(0 0, 88% 0, 100% 26px, 100% 100%, 0 100%);
-    animation:stamp-in .5s cubic-bezier(.2,.8,.2,1) backwards;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-lg);
+    overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
+    animation:rise .45s cubic-bezier(.2,.8,.2,1) backwards; transition:transform .15s;
   }
-  @media (prefers-reduced-motion: reduce){ .card{animation:none;} }
-  @keyframes stamp-in{
-    from{opacity:0; transform:translateY(6px) scale(.98);}
-    to{opacity:1; transform:none;}
-  }
-  .card::before{
-    content:"";
-    position:absolute; top:0; left:0; right:0; height:3px;
-    background:var(--cat-color,var(--brass));
-  }
-  .card-head{
-    padding:16px 16px 0;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:10px;
-  }
+  .card:active{ transform:scale(.98); }
+  @keyframes rise{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+  .thumb-wrap{ position:relative; height:150px; overflow:hidden; }
+  .thumb-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
   .cat-tag{
-    font-family:'Oswald';
-    font-size:.68rem;
-    letter-spacing:.14em;
-    color:var(--cat-color,var(--brass));
-    border:1px solid var(--cat-color,var(--brass));
-    padding:3px 8px;
-    border-radius:2px;
+    position:absolute; top:10px; left:10px; font-size:.68rem; font-weight:700; letter-spacing:.03em;
+    color:#fff; background:var(--pink); padding:4px 10px; border-radius:20px;
   }
-  .free-stamp{
-    font-family:'Oswald';
-    font-size:.6rem;
-    letter-spacing:.12em;
-    color:var(--signal);
-    border:1.5px dashed var(--signal);
-    border-radius:50%;
-    width:52px;height:52px;
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    transform:rotate(-11deg);
-    padding:4px;
-    animation:stamp-thud .4s .15s cubic-bezier(.3,1.6,.4,1) backwards;
-  }
-  @media (prefers-reduced-motion: reduce){ .free-stamp{animation:none;} }
-  @keyframes stamp-thud{
-    from{opacity:0; transform:rotate(-11deg) scale(2.2);}
-    to{opacity:1; transform:rotate(-11deg) scale(1);}
-  }
-  .card h2{
-    font-size:1.05rem;
-    margin:12px 16px 4px;
-    font-weight:600;
-    line-height:1.25;
-  }
-  .card .desc{
-    margin:0 16px 12px;
-    color:var(--bone-dim);
-    font-size:.82rem;
-  }
-  .meta-row{
-    display:flex;
-    gap:16px;
-    margin:0 16px 14px;
-    padding-top:10px;
-    border-top:1px solid var(--line);
-  }
-  .meta-row div{font-size:.72rem; color:var(--bone-dim);}
-  .meta-row b{
-    display:block;
-    font-family:'Oswald';
-    font-size:1rem;
-    color:var(--bone);
-    font-weight:600;
+  .free-tag{
+    position:absolute; top:10px; right:10px; font-size:.66rem; font-weight:700; color:var(--green);
+    background:#e9fbf2; padding:4px 10px; border-radius:20px;
   }
 
-  details{ border-top:1px solid var(--line); }
-  summary{
-    list-style:none;
-    cursor:pointer;
-    padding:11px 16px;
-    font-size:.76rem;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--khaki);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-family:'Oswald';
+  .card-body{ padding:14px 16px 16px; }
+  .card-body h2{ font-family:'Poppins'; font-size:1.02rem; margin:0 0 4px; font-weight:700; }
+  .card-body .desc{ color:var(--ink-dim); font-size:.82rem; margin:0 0 12px; }
+  .meta-row{ display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .meta-chip{
+    font-size:.74rem; color:var(--ink-dim); background:#f6f6fc;
+    border-radius:8px; padding:5px 9px; display:flex; align-items:center; gap:5px;
   }
-  summary::-webkit-details-marker{display:none;}
-  summary::after{
-    content:"▾";
-    transition:transform .2s;
-    color:var(--bone-dim);
+  .explore-btn{
+    width:100%; background:var(--primary); color:#fff; border:none;
+    border-radius:10px; padding:11px; font-weight:700; font-size:.88rem; cursor:pointer;
   }
-  details[open] summary::after{transform:rotate(180deg);}
-  .subjects{
-    margin:0;
-    padding:0 16px 14px;
-    list-style:none;
-  }
-  .subject-item{
-    border-bottom:1px dashed var(--line);
-  }
-  .subject-item:last-child{border-bottom:none;}
-  .subj-btn{
-    all:unset;
-    box-sizing:border-box;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    width:100%;
-    padding:9px 2px;
-    font-size:.84rem;
-    color:var(--bone);
-    cursor:pointer;
-    -webkit-tap-highlight-color:rgba(199,160,52,.15);
-  }
-  .subj-btn:active,
-  .subj-btn:focus-visible{ color:var(--brass); }
-  .subj-btn.active{ color:var(--khaki); }
-  .subj-btn .lec{
-    color:var(--bone-dim);
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:.78rem;
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  .subj-btn .chev{
-    color:var(--brass);
-    font-size:.85rem;
-    transition:transform .2s;
-    display:inline-block;
-  }
-  .subj-btn.active .chev{ transform:rotate(90deg); }
 
-  .lecture-list{
-    margin:0 0 10px;
-    padding-left:10px;
-    border-left:2px solid var(--line);
-    display:flex;
-    flex-direction:column;
-    gap:2px;
-  }
-  .lecture-link{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    padding:7px 8px;
-    font-size:.78rem;
-    color:var(--bone-dim);
-    text-decoration:none;
-    border-radius:2px;
-  }
-  .lecture-link:active,
-  .lecture-link:focus-visible{ background:var(--panel-hi); color:var(--brass); }
-  .lecture-link .lec-date{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:.7rem;
-    flex:0 0 auto;
-  }
-  .lecture-link.disabled{ opacity:.5; cursor:default; }
-  .loading-row{
-    padding:9px 8px;
-    font-size:.78rem;
-    color:var(--bone-dim);
-  }
-  .loading-row a{ color:var(--brass); }
+  .empty{ text-align:center; padding:60px 20px; color:var(--ink-dim); }
+  .empty .heading{ font-size:1.1rem; color:var(--ink); margin-bottom:6px; font-weight:700;}
 
-  .empty{
-    text-align:center;
-    padding:60px 20px;
-    color:var(--bone-dim);
+  .detail-hero{
+    border-radius:var(--radius-lg); overflow:hidden; margin:16px 0;
+    box-shadow:var(--shadow); border:1px solid var(--border); background:var(--panel);
   }
-  .empty .display{font-size:1.1rem; color:var(--khaki); margin-bottom:6px;}
+  .detail-hero img{ width:100%; height:210px; object-fit:cover; display:block; }
+  .detail-hero .pad{ padding:16px 18px 20px; }
+  .detail-hero .cat-pill{
+    display:inline-block; font-size:.72rem; font-weight:700; color:var(--pink);
+    background:#ffe9f2; padding:4px 10px; border-radius:20px; margin-bottom:10px;
+  }
+  .detail-hero h1{ font-family:'Poppins'; font-size:1.4rem; margin:0 0 6px; font-weight:800;}
+  .detail-hero .sub{ color:var(--ink-dim); font-size:.86rem; margin:0 0 14px; }
+  .chip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .info-chip{
+    font-size:.76rem; color:var(--ink-dim); background:#f6f6fc;
+    border-radius:9px; padding:7px 11px; display:flex; align-items:center; gap:6px;
+  }
 
-  footer{
-    text-align:center;
-    padding:26px 18px 40px;
-    color:var(--bone-dim);
-    font-size:.72rem;
-    letter-spacing:.06em;
+  .section-title{ font-family:'Poppins'; font-size:1.1rem; font-weight:800; margin:22px 2px 12px; }
+
+  .subject-list{ display:flex; flex-direction:column; gap:10px; }
+  .subject-row{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-md);
+    padding:13px 14px; box-shadow:var(--shadow); cursor:pointer;
   }
+  .subject-row .icon{
+    width:40px;height:40px;border-radius:10px;flex:0 0 auto;
+    background:var(--primary-dim); color:var(--primary);
+    display:flex;align-items:center;justify-content:center; font-size:1.1rem;
+  }
+  .subject-row .grow{ flex:1; min-width:0; }
+  .subject-row h3{ margin:0 0 3px; font-size:.94rem; font-weight:700; }
+  .subject-row .sub-meta{ font-size:.76rem; color:var(--ink-dim); }
+  .subject-row .chev{ color:var(--ink-dim); font-size:1rem; }
+
+  .lecture-row{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-md);
+    padding:12px 14px; box-shadow:var(--shadow); cursor:pointer; text-decoration:none;
+  }
+  .lecture-row .play-ic{
+    width:36px;height:36px;border-radius:50%;flex:0 0 auto;
+    background:var(--primary); color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:.85rem;
+  }
+  .lecture-row .grow{ flex:1; min-width:0; }
+  .lecture-row h3{ margin:0; font-size:.9rem; font-weight:600; }
+  .lecture-row.done .play-ic{ background:var(--green); }
+  .lecture-row .done-badge{ font-size:.68rem; color:var(--green); font-weight:700; }
+  .loading-row, .disabled-row{ padding:14px; color:var(--ink-dim); font-size:.86rem; text-align:center; }
+  .loading-row a{ color:var(--primary); font-weight:600; }
+
+  .player-card{
+    border-radius:var(--radius-lg); overflow:hidden; background:#0f1020;
+    box-shadow:var(--shadow); position:relative; aspect-ratio:16/9;
+    display:flex; align-items:center; justify-content:center; margin:16px 0; cursor:pointer;
+  }
+  .player-card::before{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(135deg,#6f5cf0 0%, #2f2666 100%); opacity:.9;
+  }
+  .player-card .play-circle{
+    position:relative; z-index:1; width:72px;height:72px;border-radius:50%;
+    background:rgba(255,255,255,.95); display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  .player-card .play-circle svg{ margin-left:4px; }
+  .player-card .hint{
+    position:absolute; bottom:12px; left:0; right:0; z-index:1;
+    text-align:center; color:#fff; font-size:.78rem; font-weight:600; opacity:.9;
+  }
+
+  .meta-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:18px; box-shadow:var(--shadow); margin-bottom:18px;
+  }
+  .meta-card h2{ font-family:'Poppins'; font-size:1.15rem; margin:0 0 10px; font-weight:800; }
+  .meta-card .batch-name{ color:var(--primary); font-weight:700; font-size:.85rem; margin-bottom:12px;}
+  .complete-btn{
+    width:100%; padding:12px; border-radius:11px; border:none; cursor:pointer;
+    font-weight:700; font-size:.88rem; margin-top:6px; background:var(--primary-dim); color:var(--primary);
+  }
+  .complete-btn.done{ background:#e9fbf2; color:var(--green); }
+
+  .tabs{ display:flex; gap:8px; margin:18px 0 14px; }
+  .tab-btn{
+    flex:1; padding:11px; border-radius:11px; border:1px solid var(--border);
+    background:var(--panel); color:var(--ink-dim); font-weight:700; font-size:.82rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .tab-btn.active{ background:var(--primary); color:#fff; border-color:var(--primary); }
+
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; }
+
+  textarea#note-input{
+    width:100%; min-height:100px; border:1px solid var(--border); border-radius:12px;
+    padding:12px; font-size:.88rem; font-family:inherit; resize:vertical; outline:none;
+    background:var(--panel); margin-bottom:10px;
+  }
+  textarea#note-input:focus{ border-color:var(--primary); }
+  .add-note-btn{
+    width:100%; padding:12px; border-radius:11px; border:none; cursor:pointer;
+    font-weight:700; font-size:.88rem; background:var(--primary); color:#fff; margin-bottom:20px;
+  }
+  .note-item{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:12px 14px; margin-bottom:10px; font-size:.85rem; position:relative; box-shadow:var(--shadow);
+  }
+  .note-item .del-note{
+    position:absolute; top:8px; right:10px; background:none; border:none;
+    color:var(--ink-dim); cursor:pointer; font-size:.8rem;
+  }
+  .notes-heading{ font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-dim); margin:0 2px 10px; }
+  .empty-tab{ text-align:center; color:var(--ink-dim); padding:30px 10px; font-size:.86rem; }
+
+  footer{ text-align:center; padding:26px 18px 10px; color:var(--ink-dim); font-size:.72rem; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="eyebrow"><span class="dot"></span>ARCHIVE STATUS — LIVE</div>
-  <h1 class="display">Defence Prep Archive</h1>
-  <p class="sub">Every free batch, indexed and filed. CDS · NDA · CAPF · AFCAT — one manifest, no paywalls.</p>
-  <div class="stats">
-    <div class="stat"><b id="stat-batches">–</b><span>Batches Filed</span></div>
-    <div class="stat"><b id="stat-lectures">–</b><span>Lectures Indexed</span></div>
-    <div class="stat"><b id="stat-subjects">–</b><span>Subject Files</span></div>
-  </div>
-</header>
-
-<div class="controls">
-  <input id="search" type="text" placeholder="Search the manifest… (e.g. maths, polity, CDS)" autocomplete="off">
-  <div class="chips" id="chips"></div>
-</div>
-
-<main>
-  <p id="count-line"></p>
-  <div class="grid" id="grid"></div>
-</main>
-
+<div class="topbar" id="topbar"></div>
+<main id="app"></main>
 <footer>Filed locally from data.json · updates when the manifest is redeployed</footer>
 
 <script>
-const SUBJECT_API = '/api/subject?token=';
 const SUBJECT_PAGE = 'https://cds.streamfiles.eu.org/#/subject/';
-
-const CAT_COLOR = {
-  CDS:   'var(--brass)',
-  NDA:   'var(--sage)',
-  CAPF:  'var(--signal)',
-  AFCAT: 'var(--steel)',
-  Legacy:'var(--bone-dim)'
-};
+const THUMB = 'doraemon.jpg';
 
 let ALL = [];
 let activeCat = 'ALL';
+let LECTURE_DATA = null;
+let LECTURE_INDEX = null;
 
-async function boot(){
-  const res = await fetch('data.json');
-  const data = await res.json();
-  ALL = data.batches;
-  buildChips();
-  updateStats();
-  render();
-}
-
-function buildChips(){
-  const cats = ['ALL', ...new Set(ALL.map(b => b.category))];
-  const wrap = document.getElementById('chips');
-  wrap.innerHTML = cats.map(c =>
-    `<button class="chip ${c==='ALL'?'active':''}" data-cat="${c}">${c}</button>`
-  ).join('');
-  wrap.querySelectorAll('.chip').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      activeCat = btn.dataset.cat;
-      wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-      btn.classList.add('active');
-      render();
-    });
-  });
-}
-
-function updateStats(){
-  const lectures = ALL.reduce((s,b)=>s+b.lecture_count,0);
-  const subjects = ALL.reduce((s,b)=>s+b.subject_count,0);
-  document.getElementById('stat-batches').textContent = ALL.length;
-  document.getElementById('stat-lectures').textContent = lectures.toLocaleString();
-  document.getElementById('stat-subjects').textContent = subjects;
-}
-
-function render(){
-  const q = document.getElementById('search').value.trim().toLowerCase();
-  const grid = document.getElementById('grid');
-
-  const filtered = ALL.filter(b=>{
-    const matchesCat = activeCat==='ALL' || b.category===activeCat;
-    const matchesSearch = !q ||
-      b.title.toLowerCase().includes(q) ||
-      b.short_description.toLowerCase().includes(q) ||
-      b.subjects.some(s=>s.title.toLowerCase().includes(q));
-    return matchesCat && matchesSearch;
-  });
-
-  document.getElementById('count-line').textContent =
-    `${filtered.length} of ${ALL.length} batches on file`;
-
-  if(!filtered.length){
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
-      <div class="display">No match in the manifest</div>
-      <div>Try a different subject or clear the filter.</div>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = filtered.map((b,i)=>{
-    const color = CAT_COLOR[b.category] || 'var(--brass)';
-    return `
-    <article class="card" style="--cat-color:${color}; animation-delay:${Math.min(i*40,300)}ms">
-      <div class="card-head">
-        <span class="cat-tag">${b.category}</span>
-        ${b.is_free ? '<div class="free-stamp">FREE<br>ACCESS</div>' : ''}
-      </div>
-      <h2>${escapeHtml(b.title)}</h2>
-      <p class="desc">${escapeHtml(b.short_description)}</p>
-      <div class="meta-row">
-        <div><b>${b.subject_count}</b>Subjects</div>
-        <div><b>${b.lecture_count}</b>Lectures</div>
-      </div>
-      <details>
-        <summary>View subject files</summary>
-        <ul class="subjects">
-          ${b.subjects.map(s=>`<li class="subject-item">
-            <button class="subj-btn" data-sid="${escapeAttr(s.id)}">
-              <span>${escapeHtml(s.title)}</span>
-              <span class="lec">${s.lecture_count} lec <span class="chev">▸</span></span>
-            </button>
-            <div class="lecture-list" hidden></div>
-          </li>`).join('')}
-        </ul>
-      </details>
-    </article>`;
-  }).join('');
-}
-
-function escapeAttr(str){
-  return String(str).replace(/"/g,'&quot;');
-}
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+function escapeAttr(str){ return String(str).replace(/"/g,'&quot;'); }
 
 function decodeJwtPayload(token){
   try {
@@ -506,19 +274,13 @@ function decodeJwtPayload(token){
       '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
     ).join(''));
     return JSON.parse(json);
-  } catch(e){
-    return null;
-  }
+  } catch(e){ return null; }
 }
-
 function jwtKey(token){
   const p = decodeJwtPayload(token);
   if(!p || !p.batch_id || !p.subject_id) return null;
   return p.batch_id + '::' + p.subject_id;
 }
-
-let LECTURE_DATA = null;
-let LECTURE_INDEX = null; // batch_id::subject_id -> entry
 async function loadLectureData(){
   if (LECTURE_DATA) return LECTURE_DATA;
   try {
@@ -529,66 +291,310 @@ async function loadLectureData(){
       const k = jwtKey(rawKey);
       if(k) LECTURE_INDEX[k] = LECTURE_DATA[rawKey];
     }
-  } catch(e) {
-    LECTURE_DATA = {};
-    LECTURE_INDEX = {};
-  }
+  } catch(e){ LECTURE_DATA = {}; LECTURE_INDEX = {}; }
   return LECTURE_DATA;
 }
-
-async function loadLectures(btn, wrap){
-  const sid = btn.dataset.sid;
-  const isOpen = !wrap.hidden;
-
-  if(isOpen){
-    wrap.hidden = true;
-    btn.classList.remove('active');
-    return;
-  }
-  wrap.hidden = false;
-  btn.classList.add('active');
-
-  if(wrap.dataset.loaded) return;
-
-  wrap.innerHTML = '<div class="loading-row">Loading lectures…</div>';
-  await loadLectureData();
+function getLecturesForSubject(sid){
   const key = jwtKey(sid);
   const entry = key ? LECTURE_INDEX[key] : LECTURE_DATA[sid];
+  return (entry && entry.lectures) ? entry.lectures : [];
+}
 
-  if(!entry || !entry.lectures || !entry.lectures.length){
-    wrap.innerHTML = `<div class="loading-row">Not indexed yet —
-      <a href="${SUBJECT_PAGE}${encodeURIComponent(sid)}" target="_blank" rel="noopener noreferrer">open on source ↗</a>
+function storeKey(bi, si, li){ return `dpa:${bi}:${si}:${li}`; }
+function getNotes(k){ try{ return JSON.parse(localStorage.getItem('notes:'+k) || '[]'); }catch(e){ return []; } }
+function saveNotes(k, notes){ localStorage.setItem('notes:'+k, JSON.stringify(notes)); }
+function isDone(k){ return localStorage.getItem('done:'+k) === '1'; }
+function setDone(k, v){ if(v) localStorage.setItem('done:'+k,'1'); else localStorage.removeItem('done:'+k); }
+
+async function boot(){
+  const res = await fetch('data.json');
+  const data = await res.json();
+  ALL = data.batches;
+  window.addEventListener('hashchange', route);
+  route();
+}
+
+function route(){
+  const hash = location.hash.replace(/^#\/?/, '');
+  const parts = hash.split('/').filter(Boolean);
+  window.scrollTo(0,0);
+  if(parts[0] === 'batch' && parts[1] !== undefined){
+    renderBatchPage(Number(parts[1]));
+  } else if(parts[0] === 'subject' && parts[1] !== undefined && parts[2] !== undefined){
+    renderSubjectPage(Number(parts[1]), Number(parts[2]));
+  } else if(parts[0] === 'lecture' && parts[1] !== undefined && parts[2] !== undefined && parts[3] !== undefined){
+    renderLecturePage(Number(parts[1]), Number(parts[2]), Number(parts[3]));
+  } else {
+    renderDashboard();
+  }
+}
+
+function setTopbar(showBack, backHref, title){
+  const bar = document.getElementById('topbar');
+  bar.innerHTML = showBack
+    ? `<a class="back-link" href="${backHref}">← ${escapeHtml(title || 'Back')}</a><div class="brand"><div class="logo">🎓</div></div>`
+    : `<div class="brand"><div class="logo">🎓</div>Defence Prep Archive</div><div></div>`;
+}
+
+function renderDashboard(){
+  setTopbar(false);
+  const lectures = ALL.reduce((s,b)=>s+b.lecture_count,0);
+  const subjects = ALL.reduce((s,b)=>s+b.subject_count,0);
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="hero">
+      <h1 class="heading">My Batches</h1>
+      <p>Every free batch, indexed and filed. CDS · NDA · CAPF · AFCAT — one manifest, no paywalls.</p>
+      <div class="stats-row">
+        <div class="stat-pill"><b>${ALL.length}</b><span>Batches</span></div>
+        <div class="stat-pill"><b>${subjects}</b><span>Subjects</span></div>
+        <div class="stat-pill"><b>${lectures.toLocaleString()}</b><span>Lectures</span></div>
+      </div>
+      <input id="search" type="text" placeholder="Search the manifest… (e.g. maths, polity, CDS)" autocomplete="off">
+      <div class="chips" id="chips"></div>
+      <p id="count-line"></p>
+    </div>
+    <div class="grid" id="grid"></div>
+  `;
+
+  const cats = ['ALL', ...new Set(ALL.map(b => b.category))];
+  document.getElementById('chips').innerHTML = cats.map(c =>
+    `<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  document.querySelectorAll('.chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      activeCat = btn.dataset.cat;
+      document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      btn.classList.add('active');
+      renderGrid();
+    });
+  });
+  document.getElementById('search').addEventListener('input', renderGrid);
+  renderGrid();
+}
+
+function renderGrid(){
+  const q = (document.getElementById('search').value || '').trim().toLowerCase();
+  const grid = document.getElementById('grid');
+
+  const filtered = ALL
+    .map((b,i)=>Object.assign({}, b, {_idx:i}))
+    .filter(b=>{
+      const matchesCat = activeCat==='ALL' || b.category===activeCat;
+      const matchesSearch = !q ||
+        b.title.toLowerCase().includes(q) ||
+        b.short_description.toLowerCase().includes(q) ||
+        b.subjects.some(s=>s.title.toLowerCase().includes(q));
+      return matchesCat && matchesSearch;
+    });
+
+  document.getElementById('count-line').textContent = `${filtered.length} of ${ALL.length} batches on file`;
+
+  if(!filtered.length){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="heading">No match in the manifest</div>
+      <div>Try a different subject or clear the filter.</div>
     </div>`;
-    wrap.dataset.loaded = '1';
     return;
   }
 
-  wrap.innerHTML = entry.lectures.map(lec=>{
+  grid.innerHTML = filtered.map((b,i)=>`
+    <div class="card" style="animation-delay:${Math.min(i*40,300)}ms" onclick="location.hash='#/batch/${b._idx}'">
+      <div class="thumb-wrap">
+        <img src="${THUMB}" alt="${escapeAttr(b.title)}">
+        <span class="cat-tag">${b.category}</span>
+        ${b.is_free ? '<span class="free-tag">FREE</span>' : ''}
+      </div>
+      <div class="card-body">
+        <h2>${escapeHtml(b.title)}</h2>
+        <p class="desc">${escapeHtml(b.short_description)}</p>
+        <div class="meta-row">
+          <span class="meta-chip">▶ ${b.lecture_count} Lectures</span>
+          <span class="meta-chip">📘 ${b.subject_count} Subjects</span>
+        </div>
+        <button class="explore-btn">Explore</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderBatchPage(bi){
+  const b = ALL[bi];
+  if(!b){ location.hash = '#/'; return; }
+  setTopbar(true, '#/', 'Back to Dashboard');
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="detail-hero">
+      <img src="${THUMB}" alt="${escapeAttr(b.title)}">
+      <div class="pad">
+        <span class="cat-pill">${b.category}</span>
+        <h1>${escapeHtml(b.title)}</h1>
+        <p class="sub">${escapeHtml(b.short_description)}</p>
+        <div class="chip-row">
+          <span class="info-chip">📚 Category: ${b.category}</span>
+          <span class="info-chip">✅ Validity: Lifetime</span>
+        </div>
+      </div>
+    </div>
+    <h2 class="section-title">Course Curriculum Subjects</h2>
+    <div class="subject-list">
+      ${b.subjects.map((s,si)=>`
+        <div class="subject-row" onclick="location.hash='#/subject/${bi}/${si}'">
+          <div class="icon">📖</div>
+          <div class="grow">
+            <h3>${escapeHtml(s.title)}</h3>
+            <div class="sub-meta">▶ ${s.lecture_count} Videos</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+async function renderSubjectPage(bi, si){
+  const b = ALL[bi];
+  const s = b ? b.subjects[si] : null;
+  if(!b || !s){ location.hash = '#/'; return; }
+  setTopbar(true, `#/batch/${bi}`, b.title);
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <h2 class="section-title" style="margin-top:20px">${escapeHtml(s.title)}</h2>
+    <div class="subject-list" id="lec-wrap">
+      <div class="loading-row">Loading lectures…</div>
+    </div>
+  `;
+
+  await loadLectureData();
+  const lectures = getLecturesForSubject(s.id);
+  const wrap = document.getElementById('lec-wrap');
+
+  if(!lectures.length){
+    wrap.innerHTML = `<div class="loading-row">Not indexed yet —
+      <a href="${SUBJECT_PAGE}${encodeURIComponent(s.id)}" target="_blank" rel="noopener noreferrer">open on source ↗</a>
+    </div>`;
+    return;
+  }
+
+  wrap.innerHTML = lectures.map((lec,li)=>{
+    const k = storeKey(bi,si,li);
+    const done = lec.url && isDone(k);
     if(lec.url){
-      return `<a class="lecture-link" href="${escapeAttr(lec.url)}" target="_blank" rel="noopener noreferrer">
-        <span>${escapeHtml(lec.title)}</span>
-        <span class="lec-date"><span class="chev">▸</span></span>
-      </a>`;
+      return `<div class="lecture-row ${done?'done':''}" onclick="location.hash='#/lecture/${bi}/${si}/${li}'">
+        <div class="play-ic">▶</div>
+        <div class="grow"><h3>${escapeHtml(lec.title)}</h3></div>
+        ${done ? '<span class="done-badge">DONE</span>' : '<span class="chev">›</span>'}
+      </div>`;
     }
-    return `<div class="lecture-link disabled"><span>${escapeHtml(lec.title)}</span><span class="lec-date">unavailable</span></div>`;
+    return `<div class="disabled-row">${escapeHtml(lec.title)} — unavailable</div>`;
   }).join('');
-  wrap.dataset.loaded = '1';
 }
 
-document.getElementById('grid').addEventListener('click', (e)=>{
-  const btn = e.target.closest('.subj-btn');
-  if(!btn) return;
-  const wrap = btn.nextElementSibling;
-  loadLectures(btn, wrap);
-});
+async function renderLecturePage(bi, si, li){
+  const b = ALL[bi];
+  const s = b ? b.subjects[si] : null;
+  if(!b || !s){ location.hash = '#/'; return; }
+  setTopbar(true, `#/subject/${bi}/${si}`, s.title);
 
-function escapeHtml(str){
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
+  await loadLectureData();
+  const lectures = getLecturesForSubject(s.id);
+  const lec = lectures[li];
+  if(!lec){ location.hash = `#/subject/${bi}/${si}`; return; }
+
+  const k = storeKey(bi, si, li);
+  const app = document.getElementById('app');
+
+  app.innerHTML = `
+    <div class="player-card" id="play-area">
+      <div class="play-circle">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#6f5cf0"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="hint">Tap to watch on Zoom ↗</div>
+    </div>
+
+    <div class="meta-card">
+      <div class="batch-name">${escapeHtml(b.title)} · ${escapeHtml(s.title)}</div>
+      <h2>${escapeHtml(lec.title)}</h2>
+      <button class="complete-btn ${isDone(k)?'done':''}" id="done-btn">
+        ${isDone(k) ? '✓ Completed' : '○ Mark as Completed'}
+      </button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="notes">📝 Notes</button>
+      <button class="tab-btn" data-tab="progress">📊 Progress</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-notes">
+      <textarea id="note-input" placeholder="Type your smart study insights, formulas, or vocabulary note here…"></textarea>
+      <button class="add-note-btn" id="add-note-btn">+ Add Note</button>
+      <p class="notes-heading" id="notes-count">SAVED NOTES (0)</p>
+      <div id="notes-list"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-progress">
+      <div class="empty-tab">${isDone(k) ? 'You have marked this class as completed. 🎉' : 'Not completed yet — finish the class and mark it done.'}</div>
+    </div>
+  `;
+
+  document.getElementById('play-area').addEventListener('click', ()=>{
+    if(lec.url) window.open(lec.url, '_blank', 'noopener,noreferrer');
+  });
+
+  const doneBtn = document.getElementById('done-btn');
+  doneBtn.addEventListener('click', ()=>{
+    const nowDone = !isDone(k);
+    setDone(k, nowDone);
+    doneBtn.classList.toggle('done', nowDone);
+    doneBtn.textContent = nowDone ? '✓ Completed' : '○ Mark as Completed';
+    document.getElementById('tab-progress').querySelector('.empty-tab').textContent =
+      nowDone ? 'You have marked this class as completed. 🎉' : 'Not completed yet — finish the class and mark it done.';
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b2=>b2.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  function refreshNotes(){
+    const notes = getNotes(k);
+    document.getElementById('notes-count').textContent = `SAVED NOTES (${notes.length})`;
+    document.getElementById('notes-list').innerHTML = notes.map((n,ni)=>`
+      <div class="note-item">
+        <button class="del-note" data-ni="${ni}">✕</button>
+        ${escapeHtml(n)}
+      </div>
+    `).join('');
+    document.querySelectorAll('.del-note').forEach(b2=>{
+      b2.addEventListener('click', ()=>{
+        const notes2 = getNotes(k);
+        notes2.splice(Number(b2.dataset.ni), 1);
+        saveNotes(k, notes2);
+        refreshNotes();
+      });
+    });
+  }
+  refreshNotes();
+
+  document.getElementById('add-note-btn').addEventListener('click', ()=>{
+    const input = document.getElementById('note-input');
+    const val = input.value.trim();
+    if(!val) return;
+    const notes = getNotes(k);
+    notes.unshift(val);
+    saveNotes(k, notes);
+    input.value = '';
+    refreshNotes();
+  });
 }
 
-document.getElementById('search').addEventListener('input', render);
 boot();
 </script>
 </body>
